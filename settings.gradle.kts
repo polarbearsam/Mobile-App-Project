@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Final Project"
+rootProject.name = "Kernel Pop"
 include(":app")
  

@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "io.github.polarbearsam.finalproject"
+    namespace = "io.github.polarbearsam.kernelpop"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "io.github.polarbearsam.finalproject"
+        applicationId = "io.github.polarbearsam.kernelpop"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
