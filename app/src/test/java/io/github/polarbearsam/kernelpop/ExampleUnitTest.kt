@@ -1,4 +1,4 @@
-package io.github.polarbearsam.finalproject
+package io.github.polarbearsam.kernelpop
 
 import org.junit.Test
 

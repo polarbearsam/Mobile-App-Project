@@ -1,4 +1,5 @@
 package io.github.polarbearsam.kernelpop
 
-class Board {
+class Tile() {
+    var num : Int = 0
 }
