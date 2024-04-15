@@ -1,4 +1,4 @@
-package io.github.polarbearsam.finalproject
+package io.github.polarbearsam.kernelpop
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
