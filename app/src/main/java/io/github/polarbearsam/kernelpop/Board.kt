@@ -22,8 +22,10 @@ class Board(xSize: Int, ySize: Int, kernelNum: Int) {
 
                     for (x in xPos-1..xPos+1) {
                         for (y in yPos-1..yPos+1) {
-                            if (x in 1..<boardX && y in 1..boardY) {
-                                board[x][y].num++
+                            if (x in 0..<boardX && y in 0..<boardY) {
+                                if (board[x][y].num != 9) {
+                                    board[x][y].num++
+                                }
                             }
                         }
                     }
@@ -35,11 +37,12 @@ class Board(xSize: Int, ySize: Int, kernelNum: Int) {
     }
 
     fun debugPrintBoard() {
-        for (y in 1..boardY) {
-            for (x in 1..boardX) {
-                Log.d("BOARD", board[x][y].num.toString() + ", ")
+        for (y in 0..<boardY) {
+            var output = ""
+            for (x in 0..<boardX) {
+                output += board[x][y].num.toString() + ", "
             }
-            Log.d("BOARD", "\n")
+            Log.d("BOARD", output)
         }
     }
 }
