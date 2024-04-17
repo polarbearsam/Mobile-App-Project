@@ -1,21 +1,45 @@
 package io.github.polarbearsam.kernelpop
 
+import android.util.Log
 import kotlin.random.Random
 
 class Board(xSize: Int, ySize: Int, kernelNum: Int) {
-    var board = Array<Array<Tile>>(xSize) {Array<Tile>(ySize) {Tile()} }
+    private var board = Array(xSize) {Array(ySize) {Tile()} }
+    private var boardX : Int
+    private var boardY : Int
 
     init {
+        boardX = xSize
+        boardY = ySize
+
         for (i in 1..kernelNum) {
             var notUpdated = true
             while (notUpdated) {
-                val xPos = Random.nextInt(0, xSize)
-                val yPos = Random.nextInt(0, ySize)
+                val xPos = Random.nextInt(0, boardX)
+                val yPos = Random.nextInt(0, boardY)
                 if (board[xPos][yPos].num != 9) {
                     board[xPos][yPos].num = 9
+
+                    for (x in xPos-1..xPos+1) {
+                        for (y in yPos-1..yPos+1) {
+                            if (x in 1..<boardX && y in 1..boardY) {
+                                board[x][y].num++
+                            }
+                        }
+                    }
+
                     notUpdated = false
                 }
             }
+        }
+    }
+
+    fun debugPrintBoard() {
+        for (y in 1..boardY) {
+            for (x in 1..boardX) {
+                Log.d("BOARD", board[x][y].num.toString() + ", ")
+            }
+            Log.d("BOARD", "\n")
         }
     }
 }

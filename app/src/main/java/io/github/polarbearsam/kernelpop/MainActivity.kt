@@ -16,5 +16,8 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        val board = Board(100, 100, 10)
+        board.debugPrintBoard()
     }
 }
