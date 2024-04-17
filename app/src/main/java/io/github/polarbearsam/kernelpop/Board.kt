@@ -36,6 +36,30 @@ class Board(xSize: Int, ySize: Int, kernelNum: Int) {
         }
     }
 
+    fun getTileNum(x: Int, y : Int): Int {
+        return if (x < boardX && y < boardY) {
+            board[x][y].num
+        } else {
+            -1
+        }
+    }
+
+    fun getTile(x: Int, y: Int): Tile? {
+        return if (x < boardX && y < boardY) {
+            board[x][y]
+        } else {
+            null
+        }
+    }
+
+    fun isMine(tile: Tile): Boolean {
+        return tile.num >= 9
+    }
+
+    fun isMine(num: Int): Boolean {
+        return num >= 9
+    }
+
     fun debugPrintBoard() {
         for (y in 0..<boardY) {
             var output = ""
