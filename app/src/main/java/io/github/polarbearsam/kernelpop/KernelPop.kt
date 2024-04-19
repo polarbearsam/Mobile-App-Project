@@ -1,6 +1,5 @@
 package io.github.polarbearsam.kernelpop
 
-import android.app.Activity
 import android.os.Bundle
 import android.widget.GridLayout
 import android.widget.ImageButton
@@ -13,16 +12,16 @@ const val X_SIZE = 9
 const val Y_SIZE = 9
 
 class KernelPop : AppCompatActivity() {
-    val img_one = R.drawable.one
-    val img_two = R.drawable.two
-    val img_three = R.drawable.three
-    val img_four = R.drawable.four
-    val img_five = R.drawable.five
-    val img_six = R.drawable.six
-    val img_seven = R.drawable.seven
-    val img_eight = R.drawable.eight
+    private val imgOne = R.drawable.one
+    private val imgTwo = R.drawable.two
+    private val imgThree = R.drawable.three
+    private val imgFour = R.drawable.four
+    private val imgFive = R.drawable.five
+    private val imgSix = R.drawable.six
+    private val imgSeven = R.drawable.seven
+    private val imgEight = R.drawable.eight
 
-    val clickedpop = R.drawable.clickedpop
+    val clickedPop = R.drawable.clicked_pop
     val empty = R.drawable.empty
     val unclicked = R.drawable.unclicked
 
@@ -37,7 +36,7 @@ class KernelPop : AppCompatActivity() {
         }
 
         val grid = findViewById<GridLayout>(R.id.gridLayout)
-        var board = Board(X_SIZE, Y_SIZE, 10)
+        val board = Board(X_SIZE, Y_SIZE, 10)
         // Populate board tiles
         for (x in 0..<X_SIZE) {
             for (y in 0..<Y_SIZE) {
@@ -51,14 +50,14 @@ class KernelPop : AppCompatActivity() {
 
     fun getDrawableFromTileType(type : Int) {
         when (type) {
-            1 -> img_one
-            2 -> img_two
-            3 -> img_three
-            4 -> img_four
-            5 -> img_five
-            6 -> img_six
-            7 -> img_seven
-            8 -> img_eight
+            1 -> imgOne
+            2 -> imgTwo
+            3 -> imgThree
+            4 -> imgFour
+            5 -> imgFive
+            6 -> imgSix
+            7 -> imgSeven
+            8 -> imgEight
         }
     }
-})
+}
