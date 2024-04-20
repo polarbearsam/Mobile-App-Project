@@ -8,25 +8,21 @@
     tools:context=".KernelPop">
 
     <android.widget.GridLayout
+        xmlns:grid="http://schemas.android.com/apk/res-auto"
         android:id="@+id/gridLayout"
-        android:layout_width="320dp"
-        android:layout_height="320dp"
-        android:layout_marginBottom="205dp"
-        android:alpha="0"
-        android:background="@drawable/custom_border"
-        android:longClickable="true"
-        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginBottom="10dp"
         app:columnCount="9"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button"
-        app:rowCount="9">
+        app:layout_constraintTop_toBottomOf="@+id/master_button">
 
     </android.widget.GridLayout>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/master_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="118dp"

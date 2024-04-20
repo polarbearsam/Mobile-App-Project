@@ -1,12 +1,18 @@
 package io.github.polarbearsam.kernelpop
 
+import android.content.res.Resources
 import android.os.Bundle
+import android.util.TypedValue
+import android.view.View
+import android.view.ViewGroup
 import android.widget.GridLayout
 import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+
 
 const val X_SIZE = 9
 const val Y_SIZE = 9
@@ -21,9 +27,9 @@ class KernelPop : AppCompatActivity() {
     private val imgSeven = R.drawable.seven
     private val imgEight = R.drawable.eight
 
-    val clickedPop = R.drawable.clicked_pop
-    val empty = R.drawable.empty
-    val unclicked = R.drawable.unclicked
+    private val clickedPop = R.drawable.clicked_pop
+    private val empty = R.drawable.empty
+    private val unclicked = R.drawable.unclicked
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,14 +48,29 @@ class KernelPop : AppCompatActivity() {
             for (y in 0..<Y_SIZE) {
                 var tileData = board.getTile(x, y)
                 var thisButton = ImageButton(this)
-                //thisButton.setImageDrawable()
-                //grid.addView()
+                //thisButton.setLayoutParams(RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT))
+                var params = GridLayout.LayoutParams()
+                thisButton.setImageDrawable(AppCompatResources.getDrawable(this, unclicked))
+                // Below, I specified image size as 1x1px just as a text, but it still ends up huge! Why?
+                // Also, GridView never wraps around to the second row no matter what I do. Why?
+                thisButton.setLayoutParams(ViewGroup.LayoutParams(1, 1))
+                if (tileData != null) {
+                    thisButton.setTag(R.id.IMAGE_DATA, tileData.num)
+                }
+                grid.addView(thisButton, params)
+
+                thisButton.setOnClickListener {
+                    val data = thisButton.getTag(R.id.IMAGE_DATA) as Int
+                    thisButton.setImageDrawable(AppCompatResources.getDrawable(this, getDrawableFromTileType(data)))
+                }
+
             }
         }
     }
 
-    fun getDrawableFromTileType(type : Int) {
-        when (type) {
+    fun getDrawableFromTileType(type : Int): Int {
+        return when (type) {
+            0 -> empty
             1 -> imgOne
             2 -> imgTwo
             3 -> imgThree
@@ -58,6 +79,8 @@ class KernelPop : AppCompatActivity() {
             6 -> imgSix
             7 -> imgSeven
             8 -> imgEight
+            9 -> clickedPop
+            else -> unclicked
         }
     }
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="centerInside"
+        android:adjustViewBounds="true"
+        android:contentDescription="TODO"
+        android:src="@drawable/seven"
+        android:visibility="visible" />
+</selector>
