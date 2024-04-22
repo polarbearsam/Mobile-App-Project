@@ -1,6 +1,8 @@
 package io.github.polarbearsam.kernelpop
 
-// An object for every tile on the game board.
+/**
+ * An object for every tile on the game board.
+  */
 class Tile() {
     var isFlagged = false
     var isVisible = false
@@ -10,4 +12,12 @@ class Tile() {
                 field = value
             }
         }
+
+    /**
+     * Checks if a tile is a kernel
+     * @return returns true if the tile is a kernel, otherwise returns false
+     */
+    fun isKernel(): Boolean {
+        return num == 9
+    }
 }
