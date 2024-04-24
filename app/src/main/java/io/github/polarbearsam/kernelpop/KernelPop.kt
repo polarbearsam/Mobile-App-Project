@@ -14,6 +14,9 @@ import androidx.core.view.WindowInsetsCompat
 const val X_SIZE = 9
 const val Y_SIZE = 9
 
+/**
+ * Class which handles the game activity
+ */
 class KernelPop : AppCompatActivity() {
     private val imgOne = R.drawable.one
     private val imgTwo = R.drawable.two
@@ -28,6 +31,10 @@ class KernelPop : AppCompatActivity() {
     private val empty = R.drawable.empty
     private val unclicked = R.drawable.unclicked
 
+    /**
+     * Creates the UI for the game
+     * @param savedInstanceState
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -66,7 +73,12 @@ class KernelPop : AppCompatActivity() {
         }
     }
 
-    fun getDrawableFromTileType(type : Int): Int {
+    /**
+     * Converts the integer value of a tile to the appropriate image
+     * @param type integer value of the tile for which an image is requested
+     * @return returns image drawable for that tile
+     */
+    private fun getDrawableFromTileType(type : Int): Int {
         return when (type) {
             0 -> empty
             1 -> imgOne
