@@ -1,18 +1,15 @@
 package io.github.polarbearsam.kernelpop
 
-import android.content.res.Resources
 import android.os.Bundle
-import android.util.TypedValue
-import android.view.View
 import android.view.ViewGroup
 import android.widget.GridLayout
 import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-
 
 const val X_SIZE = 9
 const val Y_SIZE = 9
@@ -49,15 +46,16 @@ class KernelPop : AppCompatActivity() {
                 var tileData = board.getTile(x, y)
                 var thisButton = ImageButton(this)
                 //thisButton.setLayoutParams(RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT))
-                var params = GridLayout.LayoutParams()
                 thisButton.setImageDrawable(AppCompatResources.getDrawable(this, unclicked))
+                thisButton.scaleType = ImageView.ScaleType.FIT_CENTER;
+                thisButton.adjustViewBounds = true;
                 // Below, I specified image size as 1x1px just as a text, but it still ends up huge! Why?
                 // Also, GridView never wraps around to the second row no matter what I do. Why?
-                thisButton.setLayoutParams(ViewGroup.LayoutParams(1, 1))
                 if (tileData != null) {
                     thisButton.setTag(R.id.IMAGE_DATA, tileData.num)
                 }
-                grid.addView(thisButton, params)
+                // TODO auto-determine image sizes to perfectly fit screen width
+                grid.addView(thisButton, ViewGroup.LayoutParams(200, 200))
 
                 thisButton.setOnClickListener {
                     val data = thisButton.getTag(R.id.IMAGE_DATA) as Int
