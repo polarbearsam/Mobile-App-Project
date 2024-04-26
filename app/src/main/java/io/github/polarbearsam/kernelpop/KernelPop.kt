@@ -1,7 +1,7 @@
 package io.github.polarbearsam.kernelpop
 
 import android.os.Bundle
-import android.view.ViewGroup
+import android.util.DisplayMetrics
 import android.widget.GridLayout
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+
 
 const val X_SIZE = 9
 const val Y_SIZE = 9
@@ -45,24 +46,35 @@ class KernelPop : AppCompatActivity() {
             insets
         }
 
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics) // Recently deprecated, may need new method
+        val width = displayMetrics.widthPixels
+
+        // TODO: hide this code into a 'regenerateBoard' display method
+
         val grid = findViewById<GridLayout>(R.id.gridLayout)
         val board = Board(X_SIZE, Y_SIZE, 10)
         // Populate board tiles
         for (x in 0..<X_SIZE) {
             for (y in 0..<Y_SIZE) {
-                var tileData = board.getTile(x, y)
-                var thisButton = ImageButton(this)
+                val tileData = board.getTile(x, y)
+                val thisButton = ImageButton(this)
                 //thisButton.setLayoutParams(RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT))
                 thisButton.setImageDrawable(AppCompatResources.getDrawable(this, unclicked))
-                thisButton.scaleType = ImageView.ScaleType.FIT_CENTER;
-                thisButton.adjustViewBounds = true;
-                // Below, I specified image size as 1x1px just as a text, but it still ends up huge! Why?
-                // Also, GridView never wraps around to the second row no matter what I do. Why?
+                thisButton.scaleType = ImageView.ScaleType.FIT_CENTER
+                thisButton.adjustViewBounds = true
+
+                val layoutParams = GridLayout.LayoutParams()
+                layoutParams.rowSpec = GridLayout.spec(x)
+                layoutParams.columnSpec = GridLayout.spec(y)
+                layoutParams.width = width / X_SIZE
+                layoutParams.height = width / Y_SIZE
+
                 if (tileData != null) {
                     thisButton.setTag(R.id.IMAGE_DATA, tileData.num)
                 }
-                // TODO auto-determine image sizes to perfectly fit screen width
-                grid.addView(thisButton, ViewGroup.LayoutParams(200, 200))
+
+                grid.addView(thisButton, layoutParams)
 
                 thisButton.setOnClickListener {
                     val data = thisButton.getTag(R.id.IMAGE_DATA) as Int
