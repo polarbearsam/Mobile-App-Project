@@ -12,7 +12,7 @@ import kotlin.random.Random
   */
 class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
     private var board = Array(xSize) {Array(ySize) {Tile()} } // Creates a 2D array of Tiles
-    var currentKernels = kernelNum
+    private var currentKernels = 0
         set(value) {
             field = if (value <= xSize * ySize - 1) {
                 value
@@ -25,7 +25,15 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
      * Initializes the board
      */
     init {
-        populateBoard(currentKernels)
+        populateBoard(kernelNum)
+    }
+
+    /**
+     * Gets the current number of kernels on the board
+     * @return number of kernels on the board
+     */
+    fun getKernelNum() : Int {
+        return currentKernels
     }
 
     /**
@@ -43,6 +51,26 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
     }
 
     /**
+     * Gets the number of a given tile, guarantees the tile will never be a mine.
+     * @param x x position of the tile
+     * @param y y position of the tile
+     * @return returns the number value of the tile or -1 if the position is out of bounds
+     */
+    fun getFirstTileNum(x: Int, y: Int): Int {
+        return if (x < xSize && y < ySize) {
+            val tile = board[x][y]
+            tile.isVisible = true
+
+            if (tile.isKernel()) {
+                populateBoard(1)
+                updateTiles(x, y, false)
+            }
+
+            tile.num
+        } else -1
+    }
+
+    /**
      * Gets a tile on the board
      * @param x x position of the tile
      * @param y y position of the tile
@@ -57,14 +85,36 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
     }
 
     /**
+     * Gets the number of a given tile, guarantees the tile will never be a mine.
+     * @param x x position of the tile
+     * @param y y position of the tile
+     * @return returns the tile or null if the position is out of bounds
+     */
+    fun getFirstTile(x: Int, y: Int): Tile? {
+        return if (x < xSize && y < ySize) {
+            val tile = board[x][y]
+            tile.isVisible = true
+
+            if (tile.isKernel()) {
+                populateBoard(1)
+                updateTiles(x, y, false)
+            }
+
+            tile
+        } else null
+    }
+
+    /**
      * Prints out the values of all tiles in the board for debugging purposes
      */
     fun debugPrintBoard() {
         for (y in 0..<ySize) {
             var output = ""
+
             for (x in 0..<xSize) {
                 output += board[x][y].num.toString() + ", "
             }
+
             Log.d("BOARD", output)
         }
     }
@@ -74,23 +124,33 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
      * @param kernelNum number of kernels to add to the board.
       */
     private fun populateBoard(kernelNum: Int) {
+        currentKernels = currentKernels + kernelNum
         for (i in 1..kernelNum) {
             var updated = false
+
             while (!updated) {
                 val xPos = Random.nextInt(0, xSize)
                 val yPos = Random.nextInt(0, ySize)
-                if (board[xPos][yPos].num != 9) {
-                    board[xPos][yPos].num = 9
+                val tile = board[xPos][yPos]
 
-                    for (x in xPos-1..xPos+1) {
-                        for (y in yPos-1..yPos+1) {
-                            if (x in 0..<xSize && y in 0..<ySize) {
-                                board[x][y].num++
-                            }
-                        }
-                    }
-
+                if (tile.num != 9 && !tile.isVisible) {
+                    tile.num = 9
+                    updateTiles(xPos, yPos, true)
                     updated = true
+                }
+            }
+        }
+    }
+
+    private fun updateTiles(xPos: Int, yPos: Int, increment: Boolean) {
+        for (x in xPos-1..xPos+1) {
+            for (y in yPos-1..yPos+1) {
+                if (x in 0..<xSize && y in 0..<ySize) {
+                    if (increment) {
+                        board[x][y].num++
+                    } else {
+                        board[x][y].num--
+                    }
                 }
             }
         }
