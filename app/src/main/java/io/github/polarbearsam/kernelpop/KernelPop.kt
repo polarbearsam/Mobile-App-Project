@@ -2,6 +2,7 @@ package io.github.polarbearsam.kernelpop
 
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.widget.Button
 import android.widget.GridLayout
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -11,7 +12,8 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-
+/* TODO These constants are for demo purposes and should be deleted for final product.
+Instead, we should have a presets container for difficulties that contains these vals. */
 const val X_SIZE = 9
 const val Y_SIZE = 9
 
@@ -32,6 +34,8 @@ class KernelPop : AppCompatActivity() {
     private val empty = R.drawable.empty
     private val unclicked = R.drawable.unclicked
 
+    lateinit var board: Board;
+
     /**
      * Creates the UI for the game
      * @param savedInstanceState
@@ -45,18 +49,30 @@ class KernelPop : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        val restartButton = findViewById<Button>(R.id.master_button)
 
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics) // Recently deprecated, may need new method
-        val width = displayMetrics.widthPixels
+        val screenWidth = displayMetrics.widthPixels
+        newGame(screenWidth, X_SIZE, Y_SIZE, 10)
 
-        // TODO: hide this code into a 'regenerateBoard' display method
+        restartButton.setOnClickListener {
+            newGame(screenWidth, X_SIZE, Y_SIZE, 10)
+        }
+    }
 
+    /**
+     * Starts a new game
+     * @param xSize width of game board in squares
+     * @param ySize height of game board in squares
+     * @param kernelNum number of squares that will become kernels
+     */
+    private fun newGame(screenWidth: Int, xSize: Int, ySize: Int, kernelNum: Int) {
         val grid = findViewById<GridLayout>(R.id.gridLayout)
-        val board = Board(X_SIZE, Y_SIZE, 10)
+        board = Board(xSize, ySize, kernelNum)
         // Populate board tiles
-        for (x in 0..<X_SIZE) {
-            for (y in 0..<Y_SIZE) {
+        for (x in 0..<xSize) {
+            for (y in 0..<ySize) {
                 val tileData = board.getTile(x, y)
                 val thisButton = ImageButton(this)
                 //thisButton.setLayoutParams(RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT))
@@ -67,8 +83,8 @@ class KernelPop : AppCompatActivity() {
                 val layoutParams = GridLayout.LayoutParams()
                 layoutParams.rowSpec = GridLayout.spec(x)
                 layoutParams.columnSpec = GridLayout.spec(y)
-                layoutParams.width = width / X_SIZE
-                layoutParams.height = width / Y_SIZE
+                layoutParams.width = screenWidth / xSize
+                layoutParams.height = screenWidth / ySize
 
                 if (tileData != null) {
                     thisButton.setTag(R.id.IMAGE_DATA, tileData.num)
