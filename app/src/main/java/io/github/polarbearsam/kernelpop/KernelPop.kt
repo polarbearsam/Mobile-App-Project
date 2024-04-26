@@ -2,6 +2,7 @@ package io.github.polarbearsam.kernelpop
 
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.widget.Button
 import android.widget.GridLayout
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -48,11 +49,16 @@ class KernelPop : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        val restartButton = findViewById<Button>(R.id.master_button)
 
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics) // Recently deprecated, may need new method
         val screenWidth = displayMetrics.widthPixels
         newGame(screenWidth, X_SIZE, Y_SIZE, 10)
+
+        restartButton.setOnClickListener {
+            newGame(screenWidth, X_SIZE, Y_SIZE, 10)
+        }
     }
 
     /**
