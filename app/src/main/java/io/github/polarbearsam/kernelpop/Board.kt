@@ -124,8 +124,13 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
      * @param kernelNum number of kernels to add to the board.
       */
     private fun populateBoard(kernelNum: Int) {
-        currentKernels = currentKernels + kernelNum
-        for (i in 1..kernelNum) {
+        var kernels = kernelNum
+
+        if (currentKernels + kernelNum >= xSize * ySize - 1) {
+            kernels = xSize * ySize - 1
+        }
+
+        for (i in 1..kernels) {
             var updated = false
 
             while (!updated) {
