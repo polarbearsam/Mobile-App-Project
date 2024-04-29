@@ -37,40 +37,6 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
     }
 
     /**
-     * Gets the number of a given tile
-     * @param x x position of the tile
-     * @param y y position of the tile
-     * @return returns the number value of the tile or -1 if the position is out of bounds
-     */
-    fun getTileNum(x: Int, y : Int): Int {
-        return if (x < xSize && y < ySize) {
-            board[x][y].num
-        } else {
-            -1
-        }
-    }
-
-    /**
-     * Gets the number of a given tile, guarantees the tile will never be a mine.
-     * @param x x position of the tile
-     * @param y y position of the tile
-     * @return returns the number value of the tile or -1 if the position is out of bounds
-     */
-    fun getFirstTileNum(x: Int, y: Int): Int {
-        return if (x < xSize && y < ySize) {
-            val tile = board[x][y]
-            tile.isVisible = true
-
-            if (tile.isKernel()) {
-                populateBoard(1)
-                updateTiles(x, y, false)
-            }
-
-            tile.num
-        } else -1
-    }
-
-    /**
      * Gets a tile on the board
      * @param x x position of the tile
      * @param y y position of the tile
