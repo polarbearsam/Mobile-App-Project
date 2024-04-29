@@ -3,5 +3,5 @@
     <string name="button_text">Restart</string>
     <string name="win_text">You have won! Your time: %i seconds. Press restart to go again!</string>
     <string name="lose_text">POP! Better luck next time. Your time: %i seconds. Press restart to go again!</string>
-    <item type="id" name="IMAGE_DATA"/>
+    <item name="IMAGE_DATA" type="id" />
 </resources>
