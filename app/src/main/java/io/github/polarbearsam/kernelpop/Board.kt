@@ -36,17 +36,19 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
     fun floodFill(xPos: Int, yPos: Int) {
         val tile = board[xPos][yPos]
 
-        if (tile.num == 0) {
-            for (x in xPos-1..xPos+1) {
-                for (y in yPos-1..yPos+1) {
-                    if (x in 0..<xSize && y in 0..<ySize) {
-                        floodFill(x, y)
+        if (!tile.isVisible) {
+            if (tile.num == 0) {
+                for (x in xPos - 1..xPos + 1) {
+                    for (y in yPos - 1..yPos + 1) {
+                        if (x in 0..<xSize && y in 0..<ySize) {
+                            floodFill(x, y)
+                        }
                     }
                 }
             }
-        }
 
-        tile.isVisible = true
+            tile.isVisible = true
+        }
     }
 
     /**
