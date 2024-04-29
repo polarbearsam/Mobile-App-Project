@@ -72,6 +72,22 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
     }
 
     /**
+     * Gets the position of a tile on the board
+     * @param tile the tile which position is to be determined
+     * @return returns a pair of two integers representing the x and y positions respectively
+     */
+    fun getTilePos(tile: Tile): Pair<Int, Int> {
+        for (x in 0..<xSize) {
+            for (y in 0..<ySize) {
+                if (tile == board[x][y]) {
+                    return Pair<Int, Int>(x, y)
+                }
+            }
+        }
+        return Pair<Int, Int>(-1, -1)
+    }
+
+    /**
      * Gets the number of a given tile, guarantees the tile will never be a mine.
      * @param x x position of the tile
      * @param y y position of the tile
