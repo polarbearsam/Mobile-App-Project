@@ -147,6 +147,12 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
         }
     }
 
+    /**
+     * Updates the tiles around a tile when removing or adding a mine
+     * @param xPos tile x position
+     * @param yPos tile y position
+     * @param increment when true adds one to surrounding tiles, otherwise subtracts one from tiles
+     */
     private fun updateTiles(xPos: Int, yPos: Int, increment: Boolean) {
         for (x in xPos-1..xPos+1) {
             for (y in yPos-1..yPos+1) {
