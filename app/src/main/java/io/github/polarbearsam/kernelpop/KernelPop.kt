@@ -34,7 +34,7 @@ class KernelPop : AppCompatActivity() {
     private val empty = R.drawable.empty
     private val unclicked = R.drawable.unclicked
 
-    lateinit var board: Board;
+    lateinit var board: Board
 
     /**
      * Creates the UI for the game
@@ -69,15 +69,16 @@ class KernelPop : AppCompatActivity() {
      */
     private fun newGame(screenWidth: Int, xSize: Int, ySize: Int, kernelNum: Int) {
         val grid = findViewById<GridLayout>(R.id.gridLayout)
+        grid.columnCount = xSize
+        grid.rowCount = ySize
         board = Board(xSize, ySize, kernelNum)
         // Populate board tiles
         for (x in 0..<xSize) {
             for (y in 0..<ySize) {
                 val tileData = board.getTile(x, y)
                 val thisButton = ImageButton(this)
-                //thisButton.setLayoutParams(RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT))
                 thisButton.setImageDrawable(AppCompatResources.getDrawable(this, unclicked))
-                thisButton.scaleType = ImageView.ScaleType.CENTER_CROP
+                thisButton.scaleType = ImageView.ScaleType.FIT_XY
                 thisButton.adjustViewBounds = true
 
                 val layoutParams = GridLayout.LayoutParams()
@@ -88,15 +89,37 @@ class KernelPop : AppCompatActivity() {
 
                 if (tileData != null) {
                     thisButton.setTag(R.id.IMAGE_DATA, tileData.num)
+                    tileData.curImageButton = thisButton
                 }
 
                 grid.addView(thisButton, layoutParams)
 
                 thisButton.setOnClickListener {
+                    // TODO UNCOMMON NULL CAST ERROR!
                     val data = thisButton.getTag(R.id.IMAGE_DATA) as Int
                     thisButton.setImageDrawable(AppCompatResources.getDrawable(this, getDrawableFromTileType(data)))
+                    board.floodFill(x, y)
+                    refreshBoard(xSize, ySize)
                 }
 
+            }
+        }
+    }
+
+    /**
+     * Updates the board interface to match the Model
+     * @param xSize width of game board in squares
+     * @param ySize height of game board in squares
+     */
+    private fun refreshBoard(xSize: Int, ySize: Int) {
+        for (x in 0..<xSize) {
+            for (y in 0..<ySize) {
+                val tileData = board.getTile(x, y) ?: continue
+                val thisButton = tileData.curImageButton
+                thisButton.setTag(R.id.IMAGE_DATA, tileData.num)
+                thisButton.setImageDrawable(AppCompatResources.getDrawable(this, getDrawableFromTileType(
+                    if (tileData.isVisible) tileData.num else unclicked
+                )))
             }
         }
     }
