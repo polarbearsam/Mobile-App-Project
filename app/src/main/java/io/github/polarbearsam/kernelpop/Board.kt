@@ -29,6 +29,27 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
     }
 
     /**
+     * Reveals all empty tiles around a tile.
+     * @param xPos x position of the tile
+     * @param yPos y position of the tile
+     */
+    fun floodFill(xPos: Int, yPos: Int) {
+        val tile = board[xPos][yPos]
+
+        if (tile.num == 0) {
+            for (x in xPos-1..xPos+1) {
+                for (y in yPos-1..yPos+1) {
+                    if (x in 0..<xSize && y in 0..<ySize) {
+                        floodFill(x, y)
+                    }
+                }
+            }
+        }
+
+        tile.isVisible = true
+    }
+
+    /**
      * Gets the current number of kernels on the board
      * @return number of kernels on the board
      */
@@ -68,21 +89,6 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
 
             tile
         } else null
-    }
-
-    /**
-     * Prints out the values of all tiles in the board for debugging purposes
-     */
-    fun debugPrintBoard() {
-        for (y in 0..<ySize) {
-            var output = ""
-
-            for (x in 0..<xSize) {
-                output += board[x][y].num.toString() + ", "
-            }
-
-            Log.d("BOARD", output)
-        }
     }
 
     /**
@@ -130,6 +136,21 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Prints out the values of all tiles in the board for debugging purposes
+     */
+    fun debugPrintBoard() {
+        for (y in 0..<ySize) {
+            var output = ""
+
+            for (x in 0..<xSize) {
+                output += board[x][y].num.toString() + ", "
+            }
+
+            Log.d("BOARD", output)
         }
     }
 }
