@@ -77,7 +77,7 @@ class KernelPop : AppCompatActivity() {
                 val thisButton = ImageButton(this)
                 //thisButton.setLayoutParams(RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT))
                 thisButton.setImageDrawable(AppCompatResources.getDrawable(this, unclicked))
-                thisButton.scaleType = ImageView.ScaleType.FIT_CENTER
+                thisButton.scaleType = ImageView.ScaleType.CENTER_CROP
                 thisButton.adjustViewBounds = true
 
                 val layoutParams = GridLayout.LayoutParams()
