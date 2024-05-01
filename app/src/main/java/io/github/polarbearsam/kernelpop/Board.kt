@@ -57,6 +57,7 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
         }
 
         tile.isVisible = true
+
     }
 
     /**
