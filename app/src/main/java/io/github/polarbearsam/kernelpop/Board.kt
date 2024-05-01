@@ -12,12 +12,6 @@ import kotlin.random.Random
   */
 class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
     private var board = Array(xSize) {Array(ySize) {Tile()} } // Creates a 2D array of Tiles
-    private val floodDirs: Array<IntArray> = arrayOf(
-        intArrayOf(1, 0),
-        intArrayOf(0, 1),
-        intArrayOf(-1, 0),
-        intArrayOf(0, -1)
-    )
     private var currentKernels = 0
         set(value) {
             field = if (value <= xSize * ySize - 1) {
@@ -42,22 +36,26 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
     fun floodFill(xPos: Int, yPos: Int) {
         val tile = board[xPos][yPos]
 
-        if (tile.num == 0) {
-            floodDirs.forEach { pair ->
-                val x = pair[0] + xPos
-                val y = pair[1] + yPos
-                val thisTile = getTile(x, y)
-                if (thisTile != null) {
-                    if (!thisTile.isVisible && thisTile.num < 9) {
-                        thisTile.isVisible = true
-                        floodFill(x, y)
+        if (!tile.isVisible) {
+            if (tile.num == 0) {
+                for (x in xPos-1..xPos+1) {
+                    for (y in yPos-1..yPos+1) {
+                        if (x in 0..<xSize && y in 0..<ySize) {
+                            if (!board[x][y].isVisible) {
+                                if (x == xPos || y == yPos) {
+                                    Log.d("TILE POS", "X: $x, Y: $y")
+                                    tile.isVisible = true
+                                    floodFill(x, y)
+                                } else {
+                                    board[x][y].isVisible = true
+                                }
+                            }
+                        }
                     }
                 }
             }
+            tile.isVisible = true
         }
-
-        tile.isVisible = true
-
     }
 
     /**
@@ -75,7 +73,7 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
      * @return returns the tile or null if the position is out of bounds
      */
     fun getTile(x: Int, y: Int): Tile? {
-        return if (x < xSize && y < ySize && x > 0 && y > 0) {
+        return if (x in 0..< xSize && y in 0..< ySize) {
             board[x][y]
         } else {
             null
