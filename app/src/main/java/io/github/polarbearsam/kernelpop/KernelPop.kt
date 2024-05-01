@@ -2,6 +2,7 @@ package io.github.polarbearsam.kernelpop
 
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.view.ContextThemeWrapper
 import android.widget.Button
 import android.widget.GridLayout
 import android.widget.ImageButton
@@ -76,10 +77,11 @@ class KernelPop : AppCompatActivity() {
         for (x in 0..<xSize) {
             for (y in 0..<ySize) {
                 val tileData = board.getTile(x, y)
-                val thisButton = ImageButton(this)
+                val thisButton = ImageButton(ContextThemeWrapper(this, androidx.appcompat.R.style.Base_TextAppearance_AppCompat_Widget_Button_Borderless_Colored), null, 0)
                 thisButton.setImageDrawable(AppCompatResources.getDrawable(this, unclicked))
                 thisButton.scaleType = ImageView.ScaleType.FIT_XY
                 thisButton.adjustViewBounds = true
+                thisButton.background = null
 
                 val layoutParams = GridLayout.LayoutParams()
                 layoutParams.rowSpec = GridLayout.spec(x)
@@ -95,7 +97,6 @@ class KernelPop : AppCompatActivity() {
                 grid.addView(thisButton, layoutParams)
 
                 thisButton.setOnClickListener {
-                    // TODO UNCOMMON NULL CAST ERROR!
                     val data = thisButton.getTag(R.id.IMAGE_DATA) as Int
                     thisButton.setImageDrawable(AppCompatResources.getDrawable(this, getDrawableFromTileType(data)))
                     board.floodFill(x, y)
