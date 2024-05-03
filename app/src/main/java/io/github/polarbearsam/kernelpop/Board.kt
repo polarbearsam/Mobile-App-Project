@@ -42,13 +42,8 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
                     for (y in yPos-1..yPos+1) {
                         if (x in 0..<xSize && y in 0..<ySize) {
                             if (!board[x][y].isVisible) {
-                                if (x == xPos || y == yPos) {
-                                    Log.d("TILE POS", "X: $x, Y: $y")
-                                    tile.isVisible = true
-                                    floodFill(x, y)
-                                } else {
-                                    board[x][y].isVisible = true
-                                }
+                                tile.isVisible = true
+                                floodFill(x, y)
                             }
                         }
                     }
