@@ -27,6 +27,7 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
      */
     init {
         populateBoard(kernelNum)
+        gameState = 0
     }
 
     /**
@@ -91,6 +92,12 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
     }
 
     /**
+     * Returns the current state of the game
+     * -1 if lost, 0 if ongoing, 1 if won
+     */
+    fun getGameState(): Int { return gameState }
+
+    /**
      * Gets the position of a tile on the board
      * @param tile the tile which position is to be determined
      * @return returns a pair of two integers representing the x and y positions respectively
@@ -144,7 +151,7 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
      * Checks if a game in the current state is won, lost, or ongoing.
      * @return board.gameState (-1 if lost, 0 if ongoing, 1 if won)
      */
-    private fun checkGameWon(): Int {
+    fun checkGameWon(): Int {
         var numUnclicked = 0
         var lost = false
         for (x in 0..<xSize) {

@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.GridLayout
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
@@ -15,9 +16,9 @@ import androidx.core.view.WindowInsetsCompat
 
 /* TODO These constants are for demo purposes and should be deleted for final product.
 Instead, we should have a presets container for difficulties that contains these vals. */
-const val X_SIZE = 10
-const val Y_SIZE = 22
-const val NUM_KERNELS = 40
+const val X_SIZE = 12
+const val Y_SIZE = 12
+const val NUM_KERNELS = 2
 
 /**
  * Class which handles the game activity
@@ -77,7 +78,7 @@ class KernelPop : AppCompatActivity() {
      */
     private fun newGame(screenWidth: Int, xSize: Int, ySize: Int, kernelNum: Int) {
         val grid = findViewById<GridLayout>(R.id.gridLayout)
-        hasFirstClickOccured = true
+        hasFirstClickOccured = false
         grid.columnCount = xSize
         grid.rowCount = ySize
         board = Board(xSize, ySize, kernelNum)
@@ -108,16 +109,24 @@ class KernelPop : AppCompatActivity() {
                 grid.addView(thisButton, layoutParams)
 
                 thisButton.setOnClickListener {
+                    if (board.getGameState() != 0)
+                        return@setOnClickListener
                     var data = thisButton.getTag(R.id.IMAGE_DATA) as Int
                     if (!hasFirstClickOccured) {
                         // Guarantee safe starting zone
                         hasFirstClickOccured = true
-                        val updatedTile = board.getFirstTile(x, y)
-                        data = updatedTile?.num ?: 0
+                        val updatedTile = board.revealFirstTile(x, y)
+                        data = updatedTile.num
                     }
                     thisButton.setImageDrawable(AppCompatResources.getDrawable(this, getDrawableFromTileType(data)))
                     board.floodFill(x, y)
                     refreshBoard(xSize, ySize)
+                    val newGameState = board.checkGameWon()
+                    if (newGameState == 1) {
+                        Toast.makeText(this, "You have won! Your time: %i seconds. Press restart to go again!", Toast.LENGTH_LONG).show()
+                    } else if (newGameState == -1) {
+                        Toast.makeText(this, "POP! Better luck next time. Your time: %i seconds. Press restart to go again!", Toast.LENGTH_LONG).show()
+                    }
                 }
 
             }
