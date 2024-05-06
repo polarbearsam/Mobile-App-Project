@@ -37,7 +37,7 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
     fun floodFill(xPos: Int, yPos: Int) {
         val tile = board[xPos][yPos]
 
-        if (!tile.isVisible) {
+        if (!tile.isVisible && !tile.isFlagged) {
             if (tile.num == 0) {
                 for (x in xPos-1..xPos+1) {
                     for (y in yPos-1..yPos+1) {
@@ -52,6 +52,20 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
             }
             tile.isVisible = true
         }
+    }
+
+    private fun getAdjacentTiles(xPos: Int, yPos: Int): Array<Tile?> {
+        val array = Array<Tile?>(9) {null}
+
+        for (x in xPos-1..xPos+1) {
+            for (y in yPos-1..yPos+1) {
+                if (x in 0..<xSize && y in 0..<ySize) {
+                    array[(x - xPos - 1) * (y - yPos - 1)] = board[x][y]
+                }
+            }
+        }
+
+        return array
     }
 
     /**
@@ -93,23 +107,37 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
     }
 
     /**
-     * Gets the number of a given tile, guarantees the tile will never be a mine.
-     * @param x x position of the tile
-     * @param y y position of the tile
-     * @return returns the tile or null if the position is out of bounds
+     * Reveals a given tile and returns it, guarantees the tile will always be a zero.
+     * @param xPos x position of the tile
+     * @param yPos y position of the tile
+     * @return returns the tile, must be inbounds
      */
-    fun getFirstTile(x: Int, y: Int): Tile? {
-        return if (x < xSize && y < ySize) {
-            val tile = board[x][y]
-            tile.isVisible = true
+    fun revealFirstTile(xPos: Int, yPos: Int): Tile {
+        return if (xPos < xSize && yPos < ySize) {
+            var kernels = 0
 
-            if (tile.isKernel()) {
-                populateBoard(1)
-                updateTiles(x, y, false)
+            for (x in xPos-1..xPos+1) {
+                for (y in yPos - 1..yPos + 1) {
+                    if (x in 0..<xSize && y in 0..<ySize) {
+                        val tile = board[x][y]
+
+                        if (tile.isKernel()) {
+                            kernels++
+                            tile.num = 0
+                            updateTiles(x, y, false)
+                        }
+
+                        tile.isVisible = true
+                    }
+                }
             }
 
-            tile
-        } else null
+            populateBoard(kernels)
+
+            board[xPos][yPos]
+        } else {
+            throw ArrayIndexOutOfBoundsException()
+        }
     }
 
     /**
@@ -175,10 +203,13 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
         for (x in xPos-1..xPos+1) {
             for (y in yPos-1..yPos+1) {
                 if (x in 0..<xSize && y in 0..<ySize) {
+                    val tile = board[x][y]
                     if (increment) {
                         board[x][y].num++
                     } else {
-                        board[x][y].num--
+                        if (!tile.isKernel()) {
+                            board[x][y].num--
+                        }
                     }
                 }
             }
