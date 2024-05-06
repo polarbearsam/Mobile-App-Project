@@ -15,13 +15,15 @@ import androidx.core.view.WindowInsetsCompat
 
 /* TODO These constants are for demo purposes and should be deleted for final product.
 Instead, we should have a presets container for difficulties that contains these vals. */
-const val X_SIZE = 9
-const val Y_SIZE = 9
+const val X_SIZE = 10
+const val Y_SIZE = 22
+const val NUM_KERNELS = 40
 
 /**
  * Class which handles the game activity
  */
 class KernelPop : AppCompatActivity() {
+    // Number button drawables
     private val imgOne = R.drawable.one
     private val imgTwo = R.drawable.two
     private val imgThree = R.drawable.three
@@ -31,11 +33,16 @@ class KernelPop : AppCompatActivity() {
     private val imgSeven = R.drawable.seven
     private val imgEight = R.drawable.eight
 
+    // Special button drawables
     private val clickedPop = R.drawable.clicked_pop
     private val empty = R.drawable.empty
     private val unclicked = R.drawable.unclicked
 
+    // Primary data structure used to represent the board of tiles, replaced every game
     lateinit var board: Board
+
+    // Flag that is used to apply unique code to first button press
+    private var hasFirstClickOccured = false
 
     /**
      * Creates the UI for the game
@@ -55,10 +62,10 @@ class KernelPop : AppCompatActivity() {
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics) // Recently deprecated, may need new method
         val screenWidth = displayMetrics.widthPixels
-        newGame(screenWidth, X_SIZE, Y_SIZE, 10)
+        newGame(screenWidth, X_SIZE, Y_SIZE, NUM_KERNELS)
 
         restartButton.setOnClickListener {
-            newGame(screenWidth, X_SIZE, Y_SIZE, 10)
+            newGame(screenWidth, X_SIZE, Y_SIZE, NUM_KERNELS)
         }
     }
 
@@ -70,6 +77,7 @@ class KernelPop : AppCompatActivity() {
      */
     private fun newGame(screenWidth: Int, xSize: Int, ySize: Int, kernelNum: Int) {
         val grid = findViewById<GridLayout>(R.id.gridLayout)
+        hasFirstClickOccured = true
         grid.columnCount = xSize
         grid.rowCount = ySize
         board = Board(xSize, ySize, kernelNum)
@@ -77,17 +85,20 @@ class KernelPop : AppCompatActivity() {
         for (x in 0..<xSize) {
             for (y in 0..<ySize) {
                 val tileData = board.getTile(x, y)
+                // Apply correct image for tile
+                // The style is needed to prevent standard Android padding from separating tiles
                 val thisButton = ImageButton(ContextThemeWrapper(this, androidx.appcompat.R.style.Base_TextAppearance_AppCompat_Widget_Button_Borderless_Colored), null, 0)
                 thisButton.setImageDrawable(AppCompatResources.getDrawable(this, unclicked))
                 thisButton.scaleType = ImageView.ScaleType.FIT_XY
                 thisButton.adjustViewBounds = true
                 thisButton.background = null
 
+                // To define the size and location of tiles, LayoutParams of GridLayout is instantiated
                 val layoutParams = GridLayout.LayoutParams()
-                layoutParams.rowSpec = GridLayout.spec(x)
-                layoutParams.columnSpec = GridLayout.spec(y)
+                layoutParams.rowSpec = GridLayout.spec(y)
+                layoutParams.columnSpec = GridLayout.spec(x)
                 layoutParams.width = screenWidth / xSize
-                layoutParams.height = screenWidth / ySize
+                layoutParams.height = screenWidth / xSize
 
                 if (tileData != null) {
                     thisButton.setTag(R.id.IMAGE_DATA, tileData.num)
@@ -97,7 +108,13 @@ class KernelPop : AppCompatActivity() {
                 grid.addView(thisButton, layoutParams)
 
                 thisButton.setOnClickListener {
-                    val data = thisButton.getTag(R.id.IMAGE_DATA) as Int
+                    var data = thisButton.getTag(R.id.IMAGE_DATA) as Int
+                    if (!hasFirstClickOccured) {
+                        // Guarantee safe starting zone
+                        hasFirstClickOccured = true
+                        val updatedTile = board.getFirstTile(x, y)
+                        data = updatedTile?.num ?: 0
+                    }
                     thisButton.setImageDrawable(AppCompatResources.getDrawable(this, getDrawableFromTileType(data)))
                     board.floodFill(x, y)
                     refreshBoard(xSize, ySize)

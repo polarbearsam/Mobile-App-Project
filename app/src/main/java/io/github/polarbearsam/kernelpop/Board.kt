@@ -12,6 +12,7 @@ import kotlin.random.Random
   */
 class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
     private var board = Array(xSize) {Array(ySize) {Tile()} } // Creates a 2D array of Tiles
+    private var gameState = 0 // -1 if lost, 0 if onoing, 1 if won
     private var currentKernels = 0
         set(value) {
             field = if (value <= xSize * ySize - 1) {
@@ -109,6 +110,31 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
 
             tile
         } else null
+    }
+
+    /**
+     * Checks if a game in the current state is won, lost, or ongoing.
+     * @return board.gameState (-1 if lost, 0 if ongoing, 1 if won)
+     */
+    private fun checkGameWon(): Int {
+        var numUnclicked = 0
+        var lost = false
+        for (x in 0..<xSize) {
+            for (y in 0..<ySize) {
+                val tileData = getTile(x, y)
+                if (tileData != null) {
+                    if (!tileData.isVisible) numUnclicked++
+                    else if (tileData.isKernel()) {
+                        gameState = -1
+                        lost = true
+                        break
+                    }
+                }
+            }
+            if (lost) break
+        }
+        if (numUnclicked == getKernelNum()) gameState = 1
+        return gameState
     }
 
     /**
