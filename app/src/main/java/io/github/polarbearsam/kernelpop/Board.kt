@@ -123,7 +123,7 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
         return if (xPos < xSize && yPos < ySize) {
             var kernels = 0
 
-            for (x in xPos-1..xPos+1) {
+                        for (x in xPos-1..xPos+1) {
                 for (y in yPos - 1..yPos + 1) {
                     if (x in 0..<xSize && y in 0..<ySize) {
                         val tile = board[x][y]
