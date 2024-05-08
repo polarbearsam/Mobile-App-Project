@@ -180,7 +180,7 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
         var kernels = kernelNum
 
         if (currentKernels + kernelNum >= xSize * ySize - 1) {
-            kernels = xSize * ySize - 1
+            kernels = (xSize * ySize - 1) - currentKernels
         }
 
         for (i in 1..kernels) {
@@ -193,6 +193,7 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
 
                 if (tile.num != 9 && !tile.isVisible) {
                     tile.num = 9
+                    currentKernels++
                     updateTiles(xPos, yPos, true)
                     updated = true
                 }

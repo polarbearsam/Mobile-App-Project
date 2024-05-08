@@ -18,7 +18,7 @@ import androidx.core.view.WindowInsetsCompat
 Instead, we should have a presets container for difficulties that contains these vals. */
 const val X_SIZE = 12
 const val Y_SIZE = 12
-const val NUM_KERNELS = 2
+const val NUM_KERNELS = 10
 
 /**
  * Class which handles the game activity
