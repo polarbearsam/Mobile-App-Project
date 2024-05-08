@@ -7,6 +7,7 @@ import android.widget.ImageButton
   */
 class Tile() {
     var isFlagged = false
+    var isKernel = false
     var isVisible = false
     lateinit var curImageButton : ImageButton
     var num : Int = 0
@@ -15,12 +16,4 @@ class Tile() {
                 field = value
             }
         }
-
-    /**
-     * Checks if a tile is a kernel
-     * @return returns true if the tile is a kernel, otherwise returns false
-     */
-    fun isKernel(): Boolean {
-        return num == 9
-    }
 }

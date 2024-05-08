@@ -12,7 +12,7 @@ import kotlin.random.Random
   */
 class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
     private var board = Array(xSize) {Array(ySize) {Tile()} } // Creates a 2D array of Tiles
-    private var gameState = 0 // -1 if lost, 0 if onoing, 1 if won
+    private var gameState = 0 // -1 if lost, 0 if ongoing, 1 if won
     private var currentKernels = 0
         set(value) {
             field = if (value <= xSize * ySize - 1) {
@@ -120,27 +120,34 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
      * @return returns the tile, must be inbounds
      */
     fun revealFirstTile(xPos: Int, yPos: Int): Tile {
+        debugPrintBoard()
+        // Checks if the position is valid
         return if (xPos < xSize && yPos < ySize) {
             var kernels = 0
 
+            // For all nearby tiles
             for (x in xPos-1..xPos+1) {
                 for (y in yPos - 1..yPos + 1) {
+                    // Checks if the position is valid
                     if (x in 0..<xSize && y in 0..<ySize) {
                         val tile = board[x][y]
 
-                        if (tile.isKernel()) {
+                        if (tile.isKernel) {
+                            tile.isKernel = false
                             kernels++
-                            tile.num = 0
+                            currentKernels--
+
                             updateTiles(x, y, false)
                         }
-
-                        tile.isVisible = true
                     }
                 }
             }
 
             populateBoard(kernels)
 
+            floodFill(xPos, yPos)
+            Log.d("BOARD", "")
+            debugPrintBoard()
             board[xPos][yPos]
         } else {
             throw ArrayIndexOutOfBoundsException()
@@ -154,12 +161,13 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
     fun checkGameWon(): Int {
         var numUnclicked = 0
         var lost = false
+        Log.d("GAME STATE", "Current Kernels: $currentKernels")
         for (x in 0..<xSize) {
             for (y in 0..<ySize) {
                 val tileData = getTile(x, y)
                 if (tileData != null) {
                     if (!tileData.isVisible) numUnclicked++
-                    else if (tileData.isKernel()) {
+                    else if (tileData.isKernel) {
                         gameState = -1
                         lost = true
                         break
@@ -168,6 +176,7 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
             }
             if (lost) break
         }
+        Log.d("GAME STATE", "Unclicked Tiles: $numUnclicked")
         if (numUnclicked == getKernelNum()) gameState = 1
         return gameState
     }
@@ -177,25 +186,32 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
      * @param kernelNum number of kernels to add to the board.
       */
     private fun populateBoard(kernelNum: Int) {
-        var kernels = kernelNum
+        var kernels = kernelNum // Number of kernels to add
 
+        // Checks if the number of kernels requested can fit onto the board
         if (currentKernels + kernelNum >= xSize * ySize - 1) {
-            kernels = (xSize * ySize - 1) - currentKernels
+            kernels = (xSize * ySize - 1) - currentKernels // Maximum allowed number of kernels
         }
 
+        // Adds kernels to the board
         for (i in 1..kernels) {
-            var updated = false
+            var kernelAdded = false
 
-            while (!updated) {
+            // Loops until a suitable placement can be found (infinite loop is possible)
+            while (!kernelAdded) {
+                // Gets a random tile from the board
                 val xPos = Random.nextInt(0, xSize)
                 val yPos = Random.nextInt(0, ySize)
                 val tile = board[xPos][yPos]
 
-                if (tile.num != 9 && !tile.isVisible) {
-                    tile.num = 9
+                // Checks that a mine can be placed in this position
+                if (!tile.isKernel && !tile.isVisible) {
+                    tile.isKernel = true
                     currentKernels++
+                    kernelAdded = true
+
+                    // Updates all nearby tiles accordingly
                     updateTiles(xPos, yPos, true)
-                    updated = true
                 }
             }
         }
@@ -208,14 +224,16 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
      * @param increment when true adds one to surrounding tiles, otherwise subtracts one from tiles
      */
     private fun updateTiles(xPos: Int, yPos: Int, increment: Boolean) {
+        // For all tiles surrounding the given tile
         for (x in xPos-1..xPos+1) {
             for (y in yPos-1..yPos+1) {
+                // If the tile position is valid
                 if (x in 0..<xSize && y in 0..<ySize) {
-                    val tile = board[x][y]
-                    if (increment) {
-                        board[x][y].num++
-                    } else {
-                        if (!tile.isKernel()) {
+                    // Checks that it is not the original tile.
+                    if (x != xPos || y != yPos) {
+                        if (increment) {
+                            board[x][y].num++
+                        } else {
                             board[x][y].num--
                         }
                     }
@@ -232,7 +250,12 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
             var output = ""
 
             for (x in 0..<xSize) {
-                output += board[x][y].num.toString() + ", "
+                val tile = board[x][y]
+                output += if (tile.isKernel) {
+                    "X, "
+                } else {
+                    board[x][y].num.toString() + ", "
+                }
             }
 
             Log.d("BOARD", output)
