@@ -39,7 +39,7 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
         val tile = board[xPos][yPos]
 
         if (!tile.isVisible && !tile.isFlagged) {
-            if (tile.num == 0) {
+            if (tile.num == 0 && !tile.isKernel) {
                 for (x in xPos-1..xPos+1) {
                     for (y in yPos-1..yPos+1) {
                         if (x in 0..<xSize && y in 0..<ySize) {
@@ -52,6 +52,16 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
                 }
             }
             tile.isVisible = true
+        }
+    }
+
+    private fun onGameEnd() {
+        for (x in 0..<xSize) {
+            for (y in 0..<ySize) {
+                val thisTile = getTile(x, y) ?: continue
+                if (!thisTile.isKernel) continue
+                thisTile.isVisible = true
+            }
         }
     }
 
@@ -176,7 +186,7 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
             }
             if (lost) break
         }
-        Log.d("GAME STATE", "Unclicked Tiles: $numUnclicked")
+        if (gameState == -1) onGameEnd()
         if (numUnclicked == getKernelNum()) gameState = 1
         return gameState
     }

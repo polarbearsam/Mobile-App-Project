@@ -16,9 +16,9 @@ import androidx.core.view.WindowInsetsCompat
 
 /* TODO These constants are for demo purposes and should be deleted for final product.
 Instead, we should have a presets container for difficulties that contains these vals. */
-const val X_SIZE = 12
-const val Y_SIZE = 12
-const val NUM_KERNELS = 10
+const val X_SIZE = 16
+const val Y_SIZE = 16
+const val NUM_KERNELS = 40
 
 /**
  * Class which handles the game activity
@@ -118,10 +118,9 @@ class KernelPop : AppCompatActivity() {
                         val updatedTile = board.revealFirstTile(x, y)
                         data = updatedTile.num
                     }
-                    thisButton.setImageDrawable(AppCompatResources.getDrawable(this, getDrawableFromTileType(data)))
                     board.floodFill(x, y)
-                    refreshBoard(xSize, ySize)
                     val newGameState = board.checkGameWon()
+                    refreshBoard(xSize, ySize)
                     if (newGameState == 1) {
                         Toast.makeText(this, "You have won! Your time: %i seconds. Press restart to go again!", Toast.LENGTH_LONG).show()
                     } else if (newGameState == -1) {
@@ -144,9 +143,10 @@ class KernelPop : AppCompatActivity() {
                 val tileData = board.getTile(x, y) ?: continue
                 val thisButton = tileData.curImageButton
                 thisButton.setTag(R.id.IMAGE_DATA, tileData.num)
-                thisButton.setImageDrawable(AppCompatResources.getDrawable(this, getDrawableFromTileType(
-                    if (tileData.isVisible) tileData.num else unclicked
-                )))
+                val curDrawable: Int = if (tileData.isVisible) {
+                    if (tileData.isKernel) 9 else tileData.num
+                } else { -1 }
+                thisButton.setImageDrawable(AppCompatResources.getDrawable(this, getDrawableFromTileType(curDrawable)))
             }
         }
     }

@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="75dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="5dp"
         android:backgroundTint="@color/primary"
         android:text="@string/button_text"
         android:textColorLink="@color/primary"
@@ -24,8 +24,9 @@
 
     <ScrollView
         android:id="@+id/scroller"
-        android:layout_width="409dp"
-        android:layout_height="450dp"
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
+        android:scrollbarStyle="insideOverlay"
         tools:layout_editor_absoluteX="409dp"
         tools:layout_editor_absoluteY="540dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -37,6 +38,7 @@
 
         <android.widget.GridLayout
             android:id="@+id/gridLayout"
+            android:background="@drawable/custom_border"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="0dp"
