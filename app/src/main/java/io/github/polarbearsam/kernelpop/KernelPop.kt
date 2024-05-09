@@ -111,12 +111,13 @@ class KernelPop : AppCompatActivity() {
                 thisButton.setOnClickListener {
                     if (board.getGameState() != 0)
                         return@setOnClickListener
-                    var data = thisButton.getTag(R.id.IMAGE_DATA) as Int
                     if (!hasFirstClickOccured) {
                         // Guarantee safe starting zone
                         hasFirstClickOccured = true
                         val updatedTile = board.revealFirstTile(x, y)
-                        data = updatedTile.num
+                        if (tileData != null) {
+                            thisButton.setTag(R.id.IMAGE_DATA, tileData.num)
+                        }
                     }
                     board.floodFill(x, y)
                     val newGameState = board.checkGameWon()
