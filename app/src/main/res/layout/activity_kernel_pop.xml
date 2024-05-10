@@ -26,23 +26,53 @@
         android:id="@+id/scroller"
         android:layout_width="match_parent"
         android:layout_height="600dp"
+        android:contentDescription="@string/scroll_hint"
         android:scrollbarStyle="insideOverlay"
-        tools:layout_editor_absoluteX="409dp"
-        tools:layout_editor_absoluteY="540dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/master_button"
-        android:contentDescription="@string/scroll_hint">
+        app:layout_constraintTop_toBottomOf="@+id/master_button">
 
         <android.widget.GridLayout
             android:id="@+id/gridLayout"
-            android:background="@drawable/custom_border"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="0dp"
+            android:background="@drawable/custom_border"
             app:columnCount="9" />
 
     </ScrollView>
+
+    <TextView
+        android:id="@+id/kernelCounter"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_border"
+        android:fontFamily="sans-serif"
+        android:text="45"
+        android:layout_marginBottom="5dp"
+        android:textAlignment="center"
+        android:textColor="@color/red"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:typeface="normal"
+        app:layout_constraintBottom_toTopOf="@+id/scroller"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/timeCounter"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_border"
+        android:fontFamily="sans-serif"
+        android:text="3:13"
+        android:layout_marginBottom="5dp"
+        android:textAlignment="center"
+        android:textColor="@color/yellow"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:typeface="normal"
+        app:layout_constraintBottom_toTopOf="@+id/scroller"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

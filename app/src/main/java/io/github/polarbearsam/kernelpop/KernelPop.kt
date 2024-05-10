@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.GridLayout
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -40,7 +41,10 @@ class KernelPop : AppCompatActivity() {
     private val unclicked = R.drawable.unclicked
 
     // Primary data structure used to represent the board of tiles, replaced every game
-    lateinit var board: Board
+    private lateinit var board: Board
+
+    private lateinit var kernelCounter: TextView
+    private lateinit var timer: TextView
 
     // Flag that is used to apply unique code to first button press
     private var hasFirstClickOccured = false
@@ -59,6 +63,8 @@ class KernelPop : AppCompatActivity() {
             insets
         }
         val restartButton = findViewById<Button>(R.id.master_button)
+        kernelCounter = findViewById(R.id.kernelCounter)
+        timer = findViewById(R.id.timeCounter)
 
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics) // Recently deprecated, may need new method
@@ -82,6 +88,7 @@ class KernelPop : AppCompatActivity() {
         grid.columnCount = xSize
         grid.rowCount = ySize
         board = Board(xSize, ySize, kernelNum)
+
         // Populate board tiles
         for (x in 0..<xSize) {
             for (y in 0..<ySize) {
@@ -129,6 +136,8 @@ class KernelPop : AppCompatActivity() {
                     }
                 }
 
+
+
             }
         }
     }
@@ -139,6 +148,7 @@ class KernelPop : AppCompatActivity() {
      * @param ySize height of game board in squares
      */
     private fun refreshBoard(xSize: Int, ySize: Int) {
+        var numUnlickedKernels = 0
         for (x in 0..<xSize) {
             for (y in 0..<ySize) {
                 val tileData = board.getTile(x, y) ?: continue
@@ -147,9 +157,11 @@ class KernelPop : AppCompatActivity() {
                 val curDrawable: Int = if (tileData.isVisible) {
                     if (tileData.isKernel) 9 else tileData.num
                 } else { -1 }
+                if (tileData.isKernel && !tileData.isVisible && !tileData.isFlagged) numUnlickedKernels++
                 thisButton.setImageDrawable(AppCompatResources.getDrawable(this, getDrawableFromTileType(curDrawable)))
             }
         }
+        kernelCounter.text = numUnlickedKernels.toString() // TODO factor in flags
     }
 
     /**
