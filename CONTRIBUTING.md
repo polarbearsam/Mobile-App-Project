@@ -11,5 +11,5 @@ Code contributions should meet the following standards:
 5. We will include a header with the following information for each file: (1) name of the file, (2) data file was last updated, (3) author(s) of the file
 6. All code will be stored on GitHub. All other documents will be placed in the shared Google Drive.
 7. There will be at least one comment describing every function and class. (with additional lines where needed). Complex lines of code that cannot be understood implicitly (math formulae, regex expressions, etc.) should also get inline comments.
-8. Comments will be placed aligned with the line of code (and not at the end of lines) – unless the line is very short, such as in the case of variable declarations
+8. Comments will be placed before the line of code (and not at the end of lines) – unless the line is very short, such as in the case of variable declarations
 We will be using Kotlin.
