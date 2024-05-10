@@ -49,33 +49,37 @@
 
     <TextView
         android:id="@+id/kernelCounter"
+        android:minWidth="100dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="20dp"
         android:background="@drawable/info_border"
         android:fontFamily="sans-serif"
         android:text=""
-        android:layout_marginBottom="5dp"
         android:textAlignment="center"
         android:textColor="@color/red"
         android:textSize="24sp"
         android:textStyle="bold"
         android:typeface="normal"
         app:layout_constraintBottom_toTopOf="@+id/scroller"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/master_button" />
 
     <TextView
         android:id="@+id/timeCounter"
+        android:minWidth="100dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/info_border"
         android:fontFamily="sans-serif"
-        android:text="00:00:00"
+        android:text="00:00"
         android:layout_marginBottom="5dp"
+        android:layout_marginStart="20dp"
         android:textAlignment="center"
         android:textColor="@color/yellow"
         android:textSize="24sp"
         android:textStyle="bold"
         android:typeface="normal"
         app:layout_constraintBottom_toTopOf="@+id/scroller"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/master_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>
