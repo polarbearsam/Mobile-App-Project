@@ -15,6 +15,9 @@
         android:layout_marginBottom="5dp"
         android:backgroundTint="@color/primary"
         android:text="@string/button_text"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="20sp"
         android:textColorLink="@color/primary"
         app:layout_constraintBottom_toTopOf="@+id/scroller"
         app:layout_constraintEnd_toEndOf="parent"
@@ -39,18 +42,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="0dp"
-            android:background="@drawable/custom_border"
+            android:background="@drawable/content_border"
             app:columnCount="9" />
 
     </ScrollView>
 
     <TextView
         android:id="@+id/kernelCounter"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/custom_border"
+        android:background="@drawable/info_border"
         android:fontFamily="sans-serif"
-        android:text="45"
+        android:text=""
         android:layout_marginBottom="5dp"
         android:textAlignment="center"
         android:textColor="@color/red"
@@ -62,11 +65,11 @@
 
     <TextView
         android:id="@+id/timeCounter"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/custom_border"
+        android:background="@drawable/info_border"
         android:fontFamily="sans-serif"
-        android:text="3:13"
+        android:text="00:00:00"
         android:layout_marginBottom="5dp"
         android:textAlignment="center"
         android:textColor="@color/yellow"

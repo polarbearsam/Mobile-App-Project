@@ -14,6 +14,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.Locale
 
 /* TODO These constants are for demo purposes and should be deleted for final product.
 Instead, we should have a presets container for difficulties that contains these vals. */
@@ -44,10 +50,11 @@ class KernelPop : AppCompatActivity() {
     private lateinit var board: Board
 
     private lateinit var kernelCounter: TextView
-    private lateinit var timer: TextView
+    private lateinit var timeCounter: TextView
 
     // Flag that is used to apply unique code to first button press
     private var hasFirstClickOccured = false
+    private var initTime : Long = 0 // Seconds
 
     /**
      * Creates the UI for the game
@@ -64,7 +71,7 @@ class KernelPop : AppCompatActivity() {
         }
         val restartButton = findViewById<Button>(R.id.master_button)
         kernelCounter = findViewById(R.id.kernelCounter)
-        timer = findViewById(R.id.timeCounter)
+        timeCounter = findViewById(R.id.timeCounter)
 
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics) // Recently deprecated, may need new method
@@ -87,7 +94,10 @@ class KernelPop : AppCompatActivity() {
         hasFirstClickOccured = false
         grid.columnCount = xSize
         grid.rowCount = ySize
+
         board = Board(xSize, ySize, kernelNum)
+
+        val timerRoutine = CoroutineScope(Dispatchers.Main)
 
         // Populate board tiles
         for (x in 0..<xSize) {
@@ -125,20 +135,37 @@ class KernelPop : AppCompatActivity() {
                         if (tileData != null) {
                             thisButton.setTag(R.id.IMAGE_DATA, tileData.num)
                         }
+                        initTime = System.currentTimeMillis() / 1000L
+                        timerRoutine.launch { launchTimerRoutine() }
                     }
                     board.floodFill(x, y)
                     val newGameState = board.checkGameWon()
-                    refreshBoard(xSize, ySize)
+                    refreshBoard()
                     if (newGameState == 1) {
-                        Toast.makeText(this, "You have won! Your time: %i seconds. Press restart to go again!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, R.string.win_text, Toast.LENGTH_LONG).show()
                     } else if (newGameState == -1) {
-                        Toast.makeText(this, "POP! Better luck next time. Your time: %i seconds. Press restart to go again!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, R.string.lose_text, Toast.LENGTH_LONG).show()
                     }
                 }
-
-
-
+                refreshBoard()
             }
+        }
+    }
+
+    private suspend fun launchTimerRoutine() {
+        while (board.getGameState() == 0 && hasFirstClickOccured) {
+            val timeElapsed = (System.currentTimeMillis() / 1000L) - initTime
+            val numSeconds = timeElapsed % 60
+            val numMins = timeElapsed / 60
+            val numHours = timeElapsed / 3600
+            withContext(Dispatchers.Main) {
+                val shownText = if (numHours.toInt() == 0)
+                    String.format(Locale.US, "%02d:%02d", numMins, numSeconds)
+                else
+                    String.format(Locale.US, "%02d:%02d:%02d", numHours, numMins, numSeconds)
+                timeCounter.text = String.format(Locale.US, shownText)
+            }
+            delay(1000L)
         }
     }
 
@@ -147,10 +174,10 @@ class KernelPop : AppCompatActivity() {
      * @param xSize width of game board in squares
      * @param ySize height of game board in squares
      */
-    private fun refreshBoard(xSize: Int, ySize: Int) {
+    private fun refreshBoard() {
         var numUnlickedKernels = 0
-        for (x in 0..<xSize) {
-            for (y in 0..<ySize) {
+        for (x in 0..<board.xSize) {
+            for (y in 0..<board.ySize) {
                 val tileData = board.getTile(x, y) ?: continue
                 val thisButton = tileData.curImageButton
                 thisButton.setTag(R.id.IMAGE_DATA, tileData.num)
