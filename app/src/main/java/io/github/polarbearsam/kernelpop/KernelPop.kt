@@ -131,7 +131,7 @@ class KernelPop : AppCompatActivity() {
                     if (!hasFirstClickOccured) {
                         // Guarantee safe starting zone
                         hasFirstClickOccured = true
-                        val updatedTile = board.revealFirstTile(x, y)
+                        board.revealFirstTile(x, y)
                         if (tileData != null) {
                             thisButton.setTag(R.id.IMAGE_DATA, tileData.num)
                         }
@@ -171,11 +171,9 @@ class KernelPop : AppCompatActivity() {
 
     /**
      * Updates the board interface to match the Model
-     * @param xSize width of game board in squares
-     * @param ySize height of game board in squares
      */
     private fun refreshBoard() {
-        var numUnlickedKernels = 0
+        var numUnclickedKernels = 0
         for (x in 0..<board.xSize) {
             for (y in 0..<board.ySize) {
                 val tileData = board.getTile(x, y) ?: continue
@@ -184,11 +182,11 @@ class KernelPop : AppCompatActivity() {
                 val curDrawable: Int = if (tileData.isVisible) {
                     if (tileData.isKernel) 9 else tileData.num
                 } else { -1 }
-                if (tileData.isKernel && !tileData.isVisible && !tileData.isFlagged) numUnlickedKernels++
+                if (tileData.isKernel && !tileData.isVisible && !tileData.isFlagged) numUnclickedKernels++
                 thisButton.setImageDrawable(AppCompatResources.getDrawable(this, getDrawableFromTileType(curDrawable)))
             }
         }
-        kernelCounter.text = numUnlickedKernels.toString() // TODO factor in flags
+        kernelCounter.text = numUnclickedKernels.toString() // TODO factor in flags
     }
 
     /**
