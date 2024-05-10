@@ -43,7 +43,7 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
                 for (x in xPos-1..xPos+1) {
                     for (y in yPos-1..yPos+1) {
                         if (x in 0..<xSize && y in 0..<ySize) {
-                            if (!board[x][y].isVisible) {
+                            if (!board[x][y].isVisible && !board[x][y].isFlagged) {
                                 tile.isVisible = true
                                 floodFill(x, y)
                             }
@@ -130,7 +130,6 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
      * @return returns the tile, must be inbounds
      */
     fun revealFirstTile(xPos: Int, yPos: Int): Tile {
-        debugPrintBoard()
         // Checks if the position is valid
         return if (xPos < xSize && yPos < ySize) {
             var kernels = 0
@@ -142,22 +141,22 @@ class Board(val xSize: Int, val ySize: Int, kernelNum: Int) {
                     if (x in 0..<xSize && y in 0..<ySize) {
                         val tile = board[x][y]
 
-                        if (tile.isKernel) {
-                            tile.isKernel = false
-                            kernels++
-                            currentKernels--
+                        if (!tile.isFlagged) {
+                            if (tile.isKernel) {
+                                tile.isKernel = false
+                                kernels++
+                                currentKernels--
 
-                            updateTiles(x, y, false)
+                                updateTiles(x, y, false)
+                            }
                         }
                     }
                 }
             }
 
             populateBoard(kernels)
-
             floodFill(xPos, yPos)
-            Log.d("BOARD", "")
-            debugPrintBoard()
+
             board[xPos][yPos]
         } else {
             throw ArrayIndexOutOfBoundsException()
