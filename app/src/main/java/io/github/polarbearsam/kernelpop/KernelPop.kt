@@ -99,6 +99,8 @@ class KernelPop : AppCompatActivity() {
 
         val timerRoutine = CoroutineScope(Dispatchers.Main)
 
+        kernelCounter.text = board.getKernelNum().toString()
+
         // Populate board tiles
         for (x in 0..<xSize) {
             for (y in 0..<ySize) {
@@ -147,7 +149,7 @@ class KernelPop : AppCompatActivity() {
                         Toast.makeText(this, R.string.lose_text, Toast.LENGTH_LONG).show()
                     }
                 }
-                refreshBoard()
+
             }
         }
     }
