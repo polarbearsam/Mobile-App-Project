@@ -32,8 +32,7 @@ const val NUM_KERNELS = 40
 /**
  * Class which handles the game activity
  */
-abstract class KernelPop : AppCompatActivity(), GestureDetector.OnGestureListener,
-GestureDetector.OnDoubleTapListener {
+class KernelPop : AppCompatActivity() {
     // Number button drawables
     private val imgOne = R.drawable.one
     private val imgTwo = R.drawable.two
@@ -48,6 +47,7 @@ GestureDetector.OnDoubleTapListener {
     private val clickedPop = R.drawable.clicked_pop
     private val empty = R.drawable.empty
     private val unclicked = R.drawable.unclicked
+    private val flagged = R.drawable.flagged
 
     // Primary data structure used to represent the board of tiles, replaced every game
     private lateinit var board: Board
@@ -154,10 +154,15 @@ GestureDetector.OnDoubleTapListener {
                     }
                 }
 
-                thisButton.setOnLongClickListener(View.OnLongClickListener() {
+                thisButton.setOnLongClickListener(View.OnLongClickListener {
+                    if (board.getGameState() != 0)
+                        return@OnLongClickListener false
                     if (tileData != null) {
-                        tileData.isFlagged = !tileData.isFlagged
+                        if (!tileData.isVisible) {
+                            tileData.isFlagged = !tileData.isFlagged
+                        }
                     }
+                    refreshBoard()
                     return@OnLongClickListener true
                 })
 
@@ -192,15 +197,16 @@ GestureDetector.OnDoubleTapListener {
                 val tileData = board.getTile(x, y) ?: continue
                 val thisButton = tileData.curImageButton
                 thisButton.setTag(R.id.IMAGE_DATA, tileData.num)
-                val curDrawable: Int = if (tileData.isVisible) {
-                    if (tileData.isKernel) 9 else tileData.num
-                } else { -1 }
+                var curDrawable: Int = if (tileData.isVisible) {
+                    if (tileData.isKernel) clickedPop else getDrawableFromTileType(tileData.num)
+                } else {unclicked}
+                if (tileData.isFlagged) {curDrawable = flagged}
 
                 if (tileData.isKernel && !tileData.isVisible && !tileData.isFlagged) numUnclickedKernels++
-                thisButton.setImageDrawable(AppCompatResources.getDrawable(this, getDrawableFromTileType(curDrawable)))
+                thisButton.setImageDrawable(AppCompatResources.getDrawable(this, curDrawable))
             }
         }
-        kernelCounter.text = numUnclickedKernels.toString() // TODO factor in flags
+        kernelCounter.text = numUnclickedKernels.toString()
     }
 
     /**
