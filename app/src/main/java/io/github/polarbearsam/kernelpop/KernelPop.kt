@@ -3,6 +3,8 @@ package io.github.polarbearsam.kernelpop
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.ContextThemeWrapper
+import android.view.GestureDetector
+import android.view.View
 import android.widget.Button
 import android.widget.GridLayout
 import android.widget.ImageButton
@@ -30,7 +32,8 @@ const val NUM_KERNELS = 40
 /**
  * Class which handles the game activity
  */
-class KernelPop : AppCompatActivity() {
+abstract class KernelPop : AppCompatActivity(), GestureDetector.OnGestureListener,
+GestureDetector.OnDoubleTapListener {
     // Number button drawables
     private val imgOne = R.drawable.one
     private val imgTwo = R.drawable.two
@@ -109,6 +112,7 @@ class KernelPop : AppCompatActivity() {
                 // The style is needed to prevent standard Android padding from separating tiles
                 val thisButton = ImageButton(ContextThemeWrapper(this, androidx.appcompat.R.style.Base_TextAppearance_AppCompat_Widget_Button_Borderless_Colored), null, 0)
                 thisButton.setImageDrawable(AppCompatResources.getDrawable(this, unclicked))
+                thisButton.isLongClickable = true
                 thisButton.scaleType = ImageView.ScaleType.FIT_XY
                 thisButton.adjustViewBounds = true
                 thisButton.background = null
@@ -150,6 +154,13 @@ class KernelPop : AppCompatActivity() {
                     }
                 }
 
+                thisButton.setOnLongClickListener(View.OnLongClickListener() {
+                    if (tileData != null) {
+                        tileData.isFlagged = !tileData.isFlagged
+                    }
+                    return@OnLongClickListener true
+                })
+
             }
         }
     }
@@ -184,6 +195,7 @@ class KernelPop : AppCompatActivity() {
                 val curDrawable: Int = if (tileData.isVisible) {
                     if (tileData.isKernel) 9 else tileData.num
                 } else { -1 }
+
                 if (tileData.isKernel && !tileData.isVisible && !tileData.isFlagged) numUnclickedKernels++
                 thisButton.setImageDrawable(AppCompatResources.getDrawable(this, getDrawableFromTileType(curDrawable)))
             }
