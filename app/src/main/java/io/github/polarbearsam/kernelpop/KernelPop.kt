@@ -1,5 +1,6 @@
 package io.github.polarbearsam.kernelpop
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -25,9 +26,9 @@ import kotlinx.coroutines.withContext
 import java.util.Locale
 
 const val DEFAULT_NAME = "Easy"
-const val DEFAULT_X_SIZE = 16
-const val DEFAULT_Y_SIZE = 16
-const val DEFAULT_NUM_KERNELS = 40
+const val DEFAULT_X_SIZE = 9
+const val DEFAULT_Y_SIZE = 9
+const val DEFAULT_NUM_KERNELS = 10
 
 /**
  * Class which handles the game activity
@@ -124,148 +125,170 @@ class KernelPop : AppCompatActivity() {
 
     }
 
-/**
- * Starts a new game
- * @param xSize width of game board in squares
- * @param ySize height of game board in squares
- * @param kernelNum number of squares that will become kernels
- */
-private fun newGame(screenWidth: Int, xSize: Int, ySize: Int, kernelNum: Int) {
-    val grid = findViewById<GridLayout>(R.id.gridLayout)
-    hasFirstClickOccured = false
-    grid.columnCount = xSize
-    grid.rowCount = ySize
+    /**
+     * Starts a new game
+     * @param xSize width of game board in squares
+     * @param ySize height of game board in squares
+     * @param kernelNum number of squares that will become kernels
+     */
+    private fun newGame(screenWidth: Int, xSize: Int, ySize: Int, kernelNum: Int) {
+        val grid = findViewById<GridLayout>(R.id.gridLayout)
+        hasFirstClickOccured = false
+        grid.columnCount = xSize
+        grid.rowCount = ySize
 
-    board = Board(xSize, ySize, kernelNum)
+        board = Board(xSize, ySize, kernelNum)
 
-    val timerRoutine = CoroutineScope(Dispatchers.Main)
+        val timerRoutine = CoroutineScope(Dispatchers.Main)
 
-    kernelCounter.text = board.getKernelNum().toString()
-    timeCounter.text = "00:00"
+        kernelCounter.text = board.getKernelNum().toString()
+        timeCounter.text = "00:00"
 
-    // Populate board tiles
-    for (x in 0..<xSize) {
-        for (y in 0..<ySize) {
-            val tileData = board.getTile(x, y)
-            // Apply correct image for tile
-            // The style is needed to prevent standard Android padding from separating tiles
-            val thisButton = ImageButton(ContextThemeWrapper(this, androidx.appcompat.R.style.Base_TextAppearance_AppCompat_Widget_Button_Borderless_Colored), null, 0)
-            thisButton.setImageDrawable(AppCompatResources.getDrawable(this, unclicked))
-            thisButton.isLongClickable = true
-            thisButton.scaleType = ImageView.ScaleType.FIT_XY
-            thisButton.adjustViewBounds = true
-            thisButton.background = null
+        // Populate board tiles
+        for (x in 0..<xSize) {
+            for (y in 0..<ySize) {
+                val tileData = board.getTile(x, y)
+                // Apply correct image for tile
+                // The style is needed to prevent standard Android padding from separating tiles
+                val thisButton = ImageButton(ContextThemeWrapper(this, androidx.appcompat.R.style.Base_TextAppearance_AppCompat_Widget_Button_Borderless_Colored), null, 0)
+                thisButton.setImageDrawable(AppCompatResources.getDrawable(this, unclicked))
+                thisButton.isLongClickable = true
+                thisButton.scaleType = ImageView.ScaleType.FIT_XY
+                thisButton.adjustViewBounds = true
+                thisButton.background = null
 
-            // To define the size and location of tiles, LayoutParams of GridLayout is instantiated
-            val layoutParams = GridLayout.LayoutParams()
-            layoutParams.rowSpec = GridLayout.spec(y)
-            layoutParams.columnSpec = GridLayout.spec(x)
-            layoutParams.width = screenWidth / xSize
-            layoutParams.height = screenWidth / xSize
+                // To define the size and location of tiles, LayoutParams of GridLayout is instantiated
+                val layoutParams = GridLayout.LayoutParams()
+                layoutParams.rowSpec = GridLayout.spec(y)
+                layoutParams.columnSpec = GridLayout.spec(x)
+                layoutParams.width = screenWidth / xSize
+                layoutParams.height = screenWidth / xSize
 
-            if (tileData != null) {
-                thisButton.setTag(R.id.IMAGE_DATA, tileData.num)
-                tileData.curImageButton = thisButton
-            }
-
-            grid.addView(thisButton, layoutParams)
-
-            thisButton.setOnClickListener {
-                if (board.getGameState() != 0)
-                    return@setOnClickListener
-                if (!hasFirstClickOccured) {
-                    // Guarantee safe starting zone
-                    hasFirstClickOccured = true
-                    board.revealFirstTile(x, y)
-                    if (tileData != null) {
-                        thisButton.setTag(R.id.IMAGE_DATA, tileData.num)
-                    }
-                    initTime = System.currentTimeMillis() / 1000L
-                    timerRoutine.launch { launchTimerRoutine() }
-                }
-                board.floodFill(x, y)
-                val newGameState = board.checkGameWon()
-                refreshBoard()
-                if (newGameState == 1) {
-                    Toast.makeText(this, R.string.win_text, Toast.LENGTH_LONG).show()
-                } else if (newGameState == -1) {
-                    Toast.makeText(this, R.string.lose_text, Toast.LENGTH_LONG).show()
-                }
-            }
-
-            thisButton.setOnLongClickListener(View.OnLongClickListener {
-                if (board.getGameState() != 0)
-                    return@OnLongClickListener false
                 if (tileData != null) {
-                    if (!tileData.isVisible) {
-                        tileData.isFlagged = !tileData.isFlagged
+                    thisButton.setTag(R.id.IMAGE_DATA, tileData.num)
+                    tileData.curImageButton = thisButton
+                }
+
+                grid.addView(thisButton, layoutParams)
+
+                thisButton.setOnClickListener {
+                    if (board.getGameState() != 0)
+                        return@setOnClickListener
+                    if (!hasFirstClickOccured) {
+                        // Guarantee safe starting zone
+                        hasFirstClickOccured = true
+                        board.revealFirstTile(x, y)
+                        if (tileData != null) {
+                            thisButton.setTag(R.id.IMAGE_DATA, tileData.num)
+                        }
+                        initTime = System.currentTimeMillis() / 1000L
+                        timerRoutine.launch { launchTimerRoutine() }
+                    }
+                    board.floodFill(x, y)
+                    val newGameState = board.checkGameWon()
+                    refreshBoard()
+                    if (newGameState == 1) {
+                        Toast.makeText(this, R.string.win_text, Toast.LENGTH_LONG).show()
+                        val sharedPref = getSharedPreferences(name, Context.MODE_PRIVATE)
+                        val bestTime = sharedPref.getLong("bestTime", 0)
+                        val curTime = (System.currentTimeMillis() / 1000L) - initTime
+                        if (curTime < bestTime) {
+                            val editor = sharedPref.edit()
+                            editor.putLong("bestTime", curTime)
+                            editor.apply()
+                        }
+                    } else if (newGameState == -1) {
+                        Toast.makeText(this, R.string.lose_text, Toast.LENGTH_LONG).show()
                     }
                 }
-                refreshBoard()
-                return@OnLongClickListener true
-            })
 
+                thisButton.setOnLongClickListener(View.OnLongClickListener {
+                    if (board.getGameState() != 0)
+                        return@OnLongClickListener false
+                    if (tileData != null) {
+                        if (!tileData.isVisible) {
+                            tileData.isFlagged = !tileData.isFlagged
+                        }
+                    }
+                    refreshBoard()
+                    return@OnLongClickListener true
+                })
+
+            }
         }
     }
-}
 
-private suspend fun launchTimerRoutine() {
-    while (board.getGameState() == 0 && hasFirstClickOccured) {
-        val timeElapsed = (System.currentTimeMillis() / 1000L) - initTime
-        val numSeconds = timeElapsed % 60
-        val numMins = timeElapsed / 60
-        val numHours = timeElapsed / 3600
-        withContext(Dispatchers.Main) {
+    /**
+     * launches a coroutine to delay the counter updates on a loop
+     */
+    private suspend fun launchTimerRoutine() {
+        while (board.getGameState() == 0 && hasFirstClickOccured) {
+            val timeElapsed = (System.currentTimeMillis() / 1000L) - initTime
+            withContext(Dispatchers.Main) {
+                timeCounter.text = formatTimeString(timeElapsed)
+            }
+            delay(1000L)
+        }
+    }
+
+    /**
+     * Updates the board interface to match the Model
+     */
+    private fun refreshBoard() {
+        var numUnclickedKernels = 0
+        for (x in 0..<board.xSize) {
+            for (y in 0..<board.ySize) {
+                val tileData = board.getTile(x, y) ?: continue
+                val thisButton = tileData.curImageButton
+                thisButton.setTag(R.id.IMAGE_DATA, tileData.num)
+                var curDrawable: Int = if (tileData.isVisible) {
+                    if (tileData.isKernel) clickedPop else getDrawableFromTileType(tileData.num)
+                } else {unclicked}
+                if (tileData.isFlagged) {curDrawable = flagged}
+
+                if (tileData.isKernel && !tileData.isVisible && !tileData.isFlagged) numUnclickedKernels++
+                thisButton.setImageDrawable(AppCompatResources.getDrawable(this, curDrawable))
+            }
+        }
+        kernelCounter.text = numUnclickedKernels.toString()
+    }
+
+    /**
+     * Converts the integer value of a tile to the appropriate image
+     * @param type integer value of the tile for which an image is requested
+     * @return returns image drawable for that tile
+     */
+    private fun getDrawableFromTileType(type : Int): Int {
+        return when (type) {
+            0 -> empty
+            1 -> imgOne
+            2 -> imgTwo
+            3 -> imgThree
+            4 -> imgFour
+            5 -> imgFive
+            6 -> imgSix
+            7 -> imgSeven
+            8 -> imgEight
+            9 -> clickedPop
+            else -> unclicked
+        }
+    }
+
+    companion object {
+        /**
+         * Converts number of elapsed seconds into a timestamp
+         * @param time number of seconds
+         * @return string timestamp
+         */
+        fun formatTimeString(time: Long): String {
+            val numSeconds = time % 60
+            val numMins = time / 60
+            val numHours = time / 3600
             val shownText = if (numHours.toInt() == 0)
                 String.format(Locale.US, "%02d:%02d", numMins, numSeconds)
             else
                 String.format(Locale.US, "%02d:%02d:%02d", numHours, numMins, numSeconds)
-            timeCounter.text = String.format(Locale.US, shownText)
-        }
-        delay(1000L)
-    }
-}
-
-/**
- * Updates the board interface to match the Model
- */
-private fun refreshBoard() {
-    var numUnclickedKernels = 0
-    for (x in 0..<board.xSize) {
-        for (y in 0..<board.ySize) {
-            val tileData = board.getTile(x, y) ?: continue
-            val thisButton = tileData.curImageButton
-            thisButton.setTag(R.id.IMAGE_DATA, tileData.num)
-            var curDrawable: Int = if (tileData.isVisible) {
-                if (tileData.isKernel) clickedPop else getDrawableFromTileType(tileData.num)
-            } else {unclicked}
-            if (tileData.isFlagged) {curDrawable = flagged}
-
-            if (tileData.isKernel && !tileData.isVisible && !tileData.isFlagged) numUnclickedKernels++
-            thisButton.setImageDrawable(AppCompatResources.getDrawable(this, curDrawable))
+            return shownText
         }
     }
-    kernelCounter.text = numUnclickedKernels.toString()
-}
-
-/**
- * Converts the integer value of a tile to the appropriate image
- * @param type integer value of the tile for which an image is requested
- * @return returns image drawable for that tile
- */
-private fun getDrawableFromTileType(type : Int): Int {
-    return when (type) {
-        0 -> empty
-        1 -> imgOne
-        2 -> imgTwo
-        3 -> imgThree
-        4 -> imgFour
-        5 -> imgFive
-        6 -> imgSix
-        7 -> imgSeven
-        8 -> imgEight
-        9 -> clickedPop
-        else -> unclicked
-    }
-}
 }

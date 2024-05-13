@@ -1,10 +1,12 @@
 package io.github.polarbearsam.kernelpop
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.RatingBar
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -13,6 +15,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.Locale
+
+// Scoring
+const val FIVE_STAR_FACTOR = 4.5
+const val ZERO_STAR_FACTOR = 8
 
 // Gamemode information
 val modeNames = arrayOf("Easy", "Intermediate", "Expert")
@@ -46,21 +52,36 @@ class ModesPage : AppCompatActivity() {
 
         // Dynamically create cards using the inflater
         val cardContainer = findViewById<LinearLayout>(R.id.cardContainer)
-        modeNames.forEachIndexed { index, name ->
+        modeNames.forEachIndexed { index, thisName ->
             val newCard = this.layoutInflater.inflate(R.layout.mode_card, null)
             val viewGroup = newCard as ViewGroup
             val linearLayout = viewGroup.getChildAt(0) as LinearLayout
 
             // Populate text
             val textTitle = linearLayout.getChildAt(0) as TextView
-            textTitle.text = name
+            textTitle.text = thisName
+
             val infoText = linearLayout.getChildAt(1) as TextView
             infoText.text = String.format(Locale.US, "%d rows, %d columns, %d kernels", modeRows[index], modeCols[index], modeKernels[index])
+
+            val sharedPref = getSharedPreferences(thisName, Context.MODE_PRIVATE)
+            var bestTime = sharedPref.getLong("bestTime", 0)
+            val timerText = linearLayout.getChildAt(2) as TextView
+            if (bestTime < 0.1) {
+                timerText.text = "Your best time: None!"
+                bestTime = Long.MAX_VALUE // For rating bar calc
+            } else {
+                timerText.text = "Your best time: " + KernelPop.formatTimeString(bestTime)
+            }
+
+            val scoreBar = linearLayout.getChildAt(3) as RatingBar
+            val thisFactor = (bestTime / modeKernels[index])
+            scoreBar.rating = ((1 - (thisFactor - FIVE_STAR_FACTOR)/(ZERO_STAR_FACTOR - FIVE_STAR_FACTOR)) * 100).toFloat()
 
             val cardButton = linearLayout.getChildAt(5) as Button
             cardButton.setOnClickListener {
                 val i = Intent(applicationContext, KernelPop::class.java)
-                i.putExtra("name", name)
+                i.putExtra("name", thisName)
                     .putExtra("rows", modeRows[index])
                     .putExtra("cols", modeCols[index])
                     .putExtra("kernels", modeKernels[index])
@@ -72,7 +93,7 @@ class ModesPage : AppCompatActivity() {
 
         // Navigation bar
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_nav_view)
-        bottomNavigationView.selectedItemId = R.id.navigation_game
+        bottomNavigationView.selectedItemId = R.id.navigation_modes
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_help -> {

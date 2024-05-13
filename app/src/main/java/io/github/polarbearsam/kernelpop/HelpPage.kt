@@ -34,7 +34,7 @@ class HelpPage : AppCompatActivity() {
 
         // Navigation bar
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_nav_view)
-        bottomNavigationView.selectedItemId = R.id.navigation_game
+        bottomNavigationView.selectedItemId = R.id.navigation_help
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_help -> true

@@ -9,5 +9,6 @@
     <string name="title_difficulty">Difficulty</string>
     <string name="title_modes">Modes</string>
     <string name="modes_title">Game Modes</string>
+    <string name="scores">scores</string>
     <item name="IMAGE_DATA" type="id" />
 </resources>

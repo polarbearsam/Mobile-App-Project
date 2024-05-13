@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="61dp"
         android:layout_marginEnd="50dp"
-        android:text="In front of you is a grid of spots. In some of these spots, an explosive kernal is waiting. If you hit a kernal, it's game over!"
+        android:text="In front of you is a grid of spots. In some of these spots, an explosive kernel is waiting. If you hit a kernel, it's game over!"
         app:layout_constraintBottom_toTopOf="@+id/instruction2"
         app:layout_constraintEnd_toStartOf="@+id/instructionImage1"
         app:layout_constraintStart_toStartOf="parent" />
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="61dp"
         android:layout_marginEnd="50dp"
-        android:text="Squares without kernels in them are safe, and will display a number for how many kernals are around it when hit. Kernals can be adjacent vertically, horizontally, or diagnally."
+        android:text="Squares without kernels in them are safe, and will display a number for how many kernels are around it when hit. Kernels can be adjacent vertically, horizontally, or diagnally."
         app:layout_constraintEnd_toStartOf="@+id/instructionImage2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/instructionImage2" />
@@ -50,7 +50,7 @@
         android:layout_marginStart="62dp"
         android:layout_marginTop="39dp"
         android:layout_marginEnd="49dp"
-        android:text="If you think a square contains a kernel, put a flag on it! You win when all the squares without kernals are reveaked!"
+        android:text="If you think a square contains a kernel, put a flag on it! You win when all the squares without kernels are revealed!"
         app:layout_constraintEnd_toStartOf="@+id/instructionImage3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/instruction2" />
