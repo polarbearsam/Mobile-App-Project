@@ -15,6 +15,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.Locale
+import kotlin.math.max
 
 // Scoring
 const val FIVE_STAR_FACTOR = 4.5
@@ -65,17 +66,19 @@ class ModesPage : AppCompatActivity() {
             infoText.text = String.format(Locale.US, "%d rows, %d columns, %d kernels", modeRows[index], modeCols[index], modeKernels[index])
 
             val sharedPref = getSharedPreferences(thisName, Context.MODE_PRIVATE)
-            var bestTime = sharedPref.getLong("bestTime", Long.MAX_VALUE)
+            val bestTime = sharedPref.getLong("bestTime", Long.MAX_VALUE)
             val timerText = linearLayout.getChildAt(2) as TextView
+            var triedBuffer = 1.0f
             if (bestTime == Long.MAX_VALUE) {
                 timerText.text = "Your best time: None!"
+                triedBuffer = 0.0f
             } else {
                 timerText.text = "Your best time: " + KernelPop.formatTimeString(bestTime)
             }
 
             val scoreBar = linearLayout.getChildAt(3) as RatingBar
             val thisFactor = (bestTime / modeKernels[index])
-            scoreBar.rating = ((1 - (thisFactor - FIVE_STAR_FACTOR)/(ZERO_STAR_FACTOR - FIVE_STAR_FACTOR)) * 5).toFloat()
+            scoreBar.rating = max( triedBuffer, ((1 - (thisFactor - FIVE_STAR_FACTOR)/(ZERO_STAR_FACTOR - FIVE_STAR_FACTOR)) * 5).toFloat() )
 
             val cardButton = linearLayout.getChildAt(5) as Button
             cardButton.setOnClickListener {
