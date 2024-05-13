@@ -65,11 +65,10 @@ class ModesPage : AppCompatActivity() {
             infoText.text = String.format(Locale.US, "%d rows, %d columns, %d kernels", modeRows[index], modeCols[index], modeKernels[index])
 
             val sharedPref = getSharedPreferences(thisName, Context.MODE_PRIVATE)
-            var bestTime = sharedPref.getLong("bestTime", 0)
+            var bestTime = sharedPref.getLong("bestTime", Long.MAX_VALUE)
             val timerText = linearLayout.getChildAt(2) as TextView
-            if (bestTime < 0.1) {
+            if (bestTime == Long.MAX_VALUE) {
                 timerText.text = "Your best time: None!"
-                bestTime = Long.MAX_VALUE // For rating bar calc
             } else {
                 timerText.text = "Your best time: " + KernelPop.formatTimeString(bestTime)
             }
