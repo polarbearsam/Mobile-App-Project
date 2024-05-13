@@ -24,10 +24,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Locale
 
-
-const val X_SIZE = 16
-const val Y_SIZE = 16
-const val NUM_KERNELS = 40
+const val DEFAULT_NAME = "Easy"
+const val DEFAULT_X_SIZE = 16
+const val DEFAULT_Y_SIZE = 16
+const val DEFAULT_NUM_KERNELS = 40
 
 /**
  * Class which handles the game activity
@@ -55,9 +55,13 @@ class KernelPop : AppCompatActivity() {
     private lateinit var kernelCounter: TextView
     private lateinit var timeCounter: TextView
 
-    // Flag that is used to apply unique code to first button press
+    // Game stats
     private var hasFirstClickOccured = false
     private var initTime : Long = 0 // Seconds
+    private var name = DEFAULT_NAME
+    private var rows = DEFAULT_X_SIZE
+    private var cols = DEFAULT_Y_SIZE
+    private var kernels = DEFAULT_NUM_KERNELS
 
     /**
      * Creates the UI for the game
@@ -76,13 +80,21 @@ class KernelPop : AppCompatActivity() {
         kernelCounter = findViewById(R.id.kernelCounter)
         timeCounter = findViewById(R.id.timeCounter)
 
+        val extras = intent.extras
+        if (extras != null) {
+            name = extras.getString("name").toString()
+            rows = extras.getInt("rows")
+            cols = extras.getInt("cols")
+            kernels = extras.getInt("kernels")
+        }
+
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics) // Recently deprecated, may need new method
         val screenWidth = displayMetrics.widthPixels
-        newGame(screenWidth, X_SIZE, Y_SIZE, NUM_KERNELS)
+        newGame(screenWidth, cols, rows, kernels)
 
         restartButton.setOnClickListener {
-            newGame(screenWidth, X_SIZE, Y_SIZE, NUM_KERNELS)
+            newGame(screenWidth, cols, rows, kernels)
         }
 
         // Navigation bar
@@ -97,7 +109,12 @@ class KernelPop : AppCompatActivity() {
                 }
                 R.id.navigation_game -> true
                 R.id.navigation_modes -> {
-                    startActivity(Intent(applicationContext, ModesPage::class.java))
+                    val i = Intent(applicationContext, ModesPage::class.java)
+                        i.putExtra("name", name)
+                            .putExtra("rows", rows)
+                            .putExtra("cols", cols)
+                            .putExtra("kernels", kernels)
+                    startActivity(i)
                     overridePendingTransition(0, 0)
                     true
                 }

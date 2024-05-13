@@ -9,6 +9,11 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class HelpPage : AppCompatActivity() {
+    // If returning to Game through bottom bar
+    private var name = DEFAULT_NAME
+    private var rows = DEFAULT_X_SIZE
+    private var cols = DEFAULT_Y_SIZE
+    private var kernels = DEFAULT_NUM_KERNELS
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -19,6 +24,14 @@ class HelpPage : AppCompatActivity() {
             insets
         }
 
+        val extras = intent.extras
+        if (extras != null) {
+            name = extras.getString("name").toString()
+            rows = extras.getInt("rows")
+            cols = extras.getInt("cols")
+            kernels = extras.getInt("kernels")
+        }
+
         // Navigation bar
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_nav_view)
         bottomNavigationView.selectedItemId = R.id.navigation_game
@@ -26,7 +39,12 @@ class HelpPage : AppCompatActivity() {
             when (item.itemId) {
                 R.id.navigation_help -> true
                 R.id.navigation_game -> {
-                    startActivity(Intent(applicationContext, KernelPop::class.java))
+                    val i = Intent(applicationContext, KernelPop::class.java)
+                    i.putExtra("name", name)
+                        .putExtra("rows", rows)
+                        .putExtra("cols", cols)
+                        .putExtra("kernels", kernels)
+                    startActivity(i)
                     overridePendingTransition(0, 0)
                     true
                 }

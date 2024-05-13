@@ -3,6 +3,7 @@ package io.github.polarbearsam.kernelpop
 import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
@@ -20,6 +21,11 @@ val modeRows = arrayOf(9, 22, 40)
 val modeKernels = arrayOf(10, 40, 99)
 
 class ModesPage : AppCompatActivity() {
+    // If returning to Game through bottom bar
+    private var name = DEFAULT_NAME
+    private var rows = DEFAULT_X_SIZE
+    private var cols = DEFAULT_Y_SIZE
+    private var kernels = DEFAULT_NUM_KERNELS
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -28,6 +34,14 @@ class ModesPage : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        val extras = intent.extras
+        if (extras != null) {
+            name = extras.getString("name").toString()
+            rows = extras.getInt("rows")
+            cols = extras.getInt("cols")
+            kernels = extras.getInt("kernels")
         }
 
         // Dynamically create cards using the inflater
@@ -42,7 +56,17 @@ class ModesPage : AppCompatActivity() {
             textTitle.text = name
             val infoText = linearLayout.getChildAt(1) as TextView
             infoText.text = String.format(Locale.US, "%d rows, %d columns, %d kernels", modeRows[index], modeCols[index], modeKernels[index])
-            // TODO button for each card to instantiate activity of that gamemode
+
+            val cardButton = linearLayout.getChildAt(5) as Button
+            cardButton.setOnClickListener {
+                val i = Intent(applicationContext, KernelPop::class.java)
+                i.putExtra("name", name)
+                    .putExtra("rows", modeRows[index])
+                    .putExtra("cols", modeCols[index])
+                    .putExtra("kernels", modeKernels[index])
+                startActivity(i)
+            }
+
             cardContainer.addView(newCard)
         }
 
@@ -57,7 +81,12 @@ class ModesPage : AppCompatActivity() {
                     true
                 }
                 R.id.navigation_game -> {
-                    startActivity(Intent(applicationContext, KernelPop::class.java))
+                    val i = Intent(applicationContext, KernelPop::class.java)
+                    i.putExtra("name", name)
+                        .putExtra("rows", rows)
+                        .putExtra("cols", cols)
+                        .putExtra("kernels", kernels)
+                    startActivity(i)
                     overridePendingTransition(0, 0)
                     true
                 }
