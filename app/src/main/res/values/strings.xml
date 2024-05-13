@@ -1,8 +1,13 @@
 <resources>
     <string name="app_name">Kernel Pop</string>
     <string name="button_text">Restart!</string>
-    <string name="scroll_hint">Scroll to see all tiles</string>
-    <string name="win_text">You have won! Your time: %i seconds. Press restart to go again!</string>
-    <string name="lose_text">POP! Better luck next time. Your time: %i seconds. Press restart to go again!</string>
+    <string name="scroll_hint">Scroll to see more content</string>
+    <string name="win_text">You have won! Press restart to go again!</string>
+    <string name="lose_text">POP! Better luck next time. Press restart to go again!</string>
+    <string name="title_game">Game</string>
+    <string name="title_help">Help</string>
+    <string name="title_difficulty">Difficulty</string>
+    <string name="title_modes">Modes</string>
+    <string name="modes_title">Game Modes</string>
     <item name="IMAGE_DATA" type="id" />
 </resources>

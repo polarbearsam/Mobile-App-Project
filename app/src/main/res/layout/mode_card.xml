@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/modeCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/primary"
+    android:layout_margin="10dp"
+    tools:layout_editor_absoluteX="465dp"
+    tools:layout_editor_absoluteY="30dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/difficultyTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Easy"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@color/white"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:typeface="normal" />
+
+        <TextView
+            android:id="@+id/subHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="12 rows, 12 columns, 18 kernels"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:typeface="sans" />
+
+        <TextView
+            android:id="@+id/bestTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your best time: 00:00"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:typeface="normal" />
+
+        <RatingBar
+            android:id="@+id/rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:progress="0" />
+
+        <View
+            android:id="@+id/bottomColorView"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@color/black" />
+
+        <Button
+            android:id="@+id/startGameButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Game"
+            android:layout_gravity="right"
+            android:backgroundTint="@color/secondary"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:typeface="normal" />
+
+    </LinearLayout>
+
+</RelativeLayout>

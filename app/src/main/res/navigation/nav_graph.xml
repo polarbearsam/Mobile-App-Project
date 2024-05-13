@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_game">
+
+    <activity
+        android:id="@+id/navigation_game"
+        android:name="io.github.polarbearsam.kernelpop.KernelPop"
+        android:label="@string/title_game"
+        tools:layout="@layout/activity_kernel_pop" />
+
+    <activity
+        android:id="@+id/navigation_help"
+        android:name="io.github.polarbearsam.kernelpop.HelpPage"
+        android:label="@string/title_help"
+        tools:layout="@layout/activity_help_page" />
+
+    <activity
+        android:id="@+id/navigation_modes"
+        android:name="io.github.polarbearsam.kernelpop.ModesPage"
+        android:label="@string/title_modes"
+        tools:layout="@layout/activity_modes" />
+
+</navigation>
