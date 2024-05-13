@@ -84,7 +84,6 @@
         app:layout_constraintBottom_toTopOf="@+id/scroller"
         app:layout_constraintStart_toEndOf="@+id/master_button" />
 
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav_view"
         android:layout_width="match_parent"

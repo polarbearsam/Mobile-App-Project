@@ -75,7 +75,7 @@ class ModesPage : AppCompatActivity() {
 
             val scoreBar = linearLayout.getChildAt(3) as RatingBar
             val thisFactor = (bestTime / modeKernels[index])
-            scoreBar.rating = ((1 - (thisFactor - FIVE_STAR_FACTOR)/(ZERO_STAR_FACTOR - FIVE_STAR_FACTOR)) * 100).toFloat()
+            scoreBar.rating = ((1 - (thisFactor - FIVE_STAR_FACTOR)/(ZERO_STAR_FACTOR - FIVE_STAR_FACTOR)) * 5).toFloat()
 
             val cardButton = linearLayout.getChildAt(5) as Button
             cardButton.setOnClickListener {
