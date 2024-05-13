@@ -22,10 +22,10 @@ const val FIVE_STAR_FACTOR = 4.5
 const val ZERO_STAR_FACTOR = 8
 
 // Gamemode information
-val modeNames = arrayOf("Easy", "Intermediate", "Expert")
-val modeCols = arrayOf(9, 12, 12)
-val modeRows = arrayOf(9, 22, 40)
-val modeKernels = arrayOf(10, 40, 99)
+val modeNames = arrayOf("Easy", "Intermediate", "Advanced", "Expert", "Ultimate Test")
+val modeCols = arrayOf(     9,  12, 12, 12, 12  )
+val modeRows = arrayOf(     9,  22, 30, 40, 80  )
+val modeKernels = arrayOf(  10, 40, 55, 99, 192 )
 
 class ModesPage : AppCompatActivity() {
     // If returning to Game through bottom bar
