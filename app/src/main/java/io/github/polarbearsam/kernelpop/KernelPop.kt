@@ -188,7 +188,6 @@ class KernelPop : AppCompatActivity() {
                     val newGameState = board.checkGameWon()
                     refreshBoard()
                     if (newGameState == 1) {
-                        Toast.makeText(this, R.string.win_text, Toast.LENGTH_LONG).show()
                         val sharedPref = getSharedPreferences(name, Context.MODE_PRIVATE)
                         val bestTime = sharedPref.getLong("bestTime", 0)
                         val curTime = (System.currentTimeMillis() / 1000L) - initTime
@@ -197,6 +196,7 @@ class KernelPop : AppCompatActivity() {
                             editor.putLong("bestTime", curTime)
                             editor.apply()
                         }
+                        Toast.makeText(this, R.string.win_text, Toast.LENGTH_LONG).show()
                     } else if (newGameState == -1) {
                         Toast.makeText(this, R.string.lose_text, Toast.LENGTH_LONG).show()
                     }
