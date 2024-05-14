@@ -109,7 +109,8 @@
         android:backgroundTint="@color/primary"
         android:text="Play!"
         app:layout_constraintBottom_toTopOf="@+id/bottom_nav_view"
-        app:layout_constraintStart_toEndOf="@+id/instruction3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/instruction3" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
