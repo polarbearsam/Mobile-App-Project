@@ -46,6 +46,7 @@ class KernelPop : AppCompatActivity() {
 
     // Special button drawables
     private val clickedPop = R.drawable.clicked_pop
+    private val winPop = R.drawable.pop
     private val empty = R.drawable.empty
     private val unclicked = R.drawable.unclicked
     private val flagged = R.drawable.flagged
@@ -244,7 +245,8 @@ class KernelPop : AppCompatActivity() {
                 var curDrawable: Int = if (tileData.isVisible) {
                     if (tileData.isKernel) clickedPop else getDrawableFromTileType(tileData.num)
                 } else {unclicked}
-                if (tileData.isFlagged) {curDrawable = flagged}
+                if (tileData.isFlagged && board.getGameState() == 0) {curDrawable = flagged}
+                else if (tileData.isKernel && board.getGameState() == 1) {curDrawable = winPop}
 
                 if (tileData.isKernel && !tileData.isVisible && !tileData.isFlagged) numUnclickedKernels++
                 thisButton.setImageDrawable(AppCompatResources.getDrawable(this, curDrawable))

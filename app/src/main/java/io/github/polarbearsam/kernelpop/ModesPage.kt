@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.RatingBar
-import android.widget.ScrollView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -15,16 +14,17 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.Locale
+import kotlin.math.max
 
 // Scoring
 const val FIVE_STAR_FACTOR = 4.5
 const val ZERO_STAR_FACTOR = 8
 
 // Gamemode information
-val modeNames = arrayOf("Easy", "Intermediate", "Expert")
-val modeCols = arrayOf(9, 12, 12)
-val modeRows = arrayOf(9, 22, 40)
-val modeKernels = arrayOf(10, 40, 99)
+val modeNames = arrayOf("Easy", "Intermediate", "Advanced", "Expert", "Ultimate Test")
+val modeCols = arrayOf(     9,  12, 12, 12, 12  )
+val modeRows = arrayOf(     9,  22, 30, 40, 80  )
+val modeKernels = arrayOf(  10, 40, 55, 99, 192 )
 
 class ModesPage : AppCompatActivity() {
     // If returning to Game through bottom bar
@@ -65,17 +65,19 @@ class ModesPage : AppCompatActivity() {
             infoText.text = String.format(Locale.US, "%d rows, %d columns, %d kernels", modeRows[index], modeCols[index], modeKernels[index])
 
             val sharedPref = getSharedPreferences(thisName, Context.MODE_PRIVATE)
-            var bestTime = sharedPref.getLong("bestTime", Long.MAX_VALUE)
+            val bestTime = sharedPref.getLong("bestTime", Long.MAX_VALUE)
             val timerText = linearLayout.getChildAt(2) as TextView
+            var triedBuffer = 1.0f
             if (bestTime == Long.MAX_VALUE) {
                 timerText.text = "Your best time: None!"
+                triedBuffer = 0.0f
             } else {
                 timerText.text = "Your best time: " + KernelPop.formatTimeString(bestTime)
             }
 
             val scoreBar = linearLayout.getChildAt(3) as RatingBar
             val thisFactor = (bestTime / modeKernels[index])
-            scoreBar.rating = ((1 - (thisFactor - FIVE_STAR_FACTOR)/(ZERO_STAR_FACTOR - FIVE_STAR_FACTOR)) * 5).toFloat()
+            scoreBar.rating = max( triedBuffer, ((1 - (thisFactor - FIVE_STAR_FACTOR)/(ZERO_STAR_FACTOR - FIVE_STAR_FACTOR)) * 5).toFloat() )
 
             val cardButton = linearLayout.getChildAt(5) as Button
             cardButton.setOnClickListener {

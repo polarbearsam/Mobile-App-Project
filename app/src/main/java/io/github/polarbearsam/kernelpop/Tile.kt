@@ -5,7 +5,7 @@ import android.widget.ImageButton
 /**
  * An object for every tile on the game board.
   */
-class Tile() {
+class Tile {
     var isFlagged = false
     var isKernel = false
     var isVisible = false
