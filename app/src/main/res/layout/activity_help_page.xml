@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/primary"
         android:text="@string/modes_title"
@@ -25,32 +25,34 @@
         android:id="@+id/instruction1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="61dp"
-        android:layout_marginEnd="50dp"
-        android:text="In front of you is a grid of spots. In some of these spots, an explosive kernel is waiting. If you hit a kernel, it's game over!"
-        app:layout_constraintBottom_toTopOf="@+id/instruction2"
+        android:layout_marginStart="53dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="70dp"
+        android:text="In front of you is a grid of spaces. In some of these spaces, an explosive kernel is waiting. If you hit a kernel, it's game over!"
         app:layout_constraintEnd_toStartOf="@+id/instructionImage1"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <TextView
         android:id="@+id/instruction2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="61dp"
-        android:layout_marginEnd="50dp"
-        android:text="Squares without kernels in them are safe, and will display a number for how many kernels are around it when hit. Kernels can be adjacent vertically, horizontally, or diagnally."
+        android:layout_marginStart="53dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="70dp"
+        android:text="Spaces without kernels in them are safe, and will display a number for how many kernels are around it when hit. Kernels can be adjacent vertically, horizontally, or diagnally."
         app:layout_constraintEnd_toStartOf="@+id/instructionImage2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/instructionImage2" />
+        app:layout_constraintTop_toBottomOf="@+id/instruction1" />
 
     <TextView
         android:id="@+id/instruction3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="62dp"
-        android:layout_marginTop="39dp"
-        android:layout_marginEnd="49dp"
-        android:text="If you think a square contains a kernel, put a flag on it! You win when all the squares without kernels are revealed!"
+        android:layout_marginStart="53dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="71dp"
+        android:text="If you think a space contains a kernel, put a bag on it! You win when all the spaces without kernels are revealed!"
         app:layout_constraintEnd_toStartOf="@+id/instructionImage3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/instruction2" />
@@ -59,18 +61,19 @@
         android:id="@+id/instructionImage1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="64dp"
-        app:layout_constraintBottom_toTopOf="@+id/moveOn"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="51dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/instruction1"
+        app:layout_constraintTop_toBottomOf="@+id/title"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/instructionImage2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="27dp"
-        android:layout_marginEnd="64dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="51dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/instruction2"
         app:layout_constraintTop_toBottomOf="@+id/instructionImage1"
@@ -80,32 +83,32 @@
         android:id="@+id/instructionImage3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="29dp"
-        android:layout_marginEnd="64dp"
+        android:layout_marginEnd="51dp"
+        android:layout_marginBottom="31dp"
+        app:layout_constraintBottom_toTopOf="@+id/moveOn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/instruction3"
-        app:layout_constraintTop_toBottomOf="@+id/instructionImage2"
         tools:srcCompat="@tools:sample/avatars" />
 
     <Button
         android:id="@+id/moveOn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="81dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="25dp"
+        android:backgroundTint="@color/primary"
         android:text="Play!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/instruction3"
+        app:layout_constraintTop_toBottomOf="@+id/instruction3" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav_view"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
         android:background="?android:attr/windowBackground"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
         app:menu="@menu/bottom_nav_menu" />
 </androidx.constraintlayout.widget.ConstraintLayout>

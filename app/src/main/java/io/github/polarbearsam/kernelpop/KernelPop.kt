@@ -189,7 +189,7 @@ class KernelPop : AppCompatActivity() {
                     refreshBoard()
                     if (newGameState == 1) {
                         val sharedPref = getSharedPreferences(name, Context.MODE_PRIVATE)
-                        val bestTime = sharedPref.getLong("bestTime", Long.MAX_VALUE)
+                        val bestTime = sharedPref.getLong("bestTime", 0)
                         val curTime = (System.currentTimeMillis() / 1000L) - initTime
                         if (curTime < bestTime) {
                             val editor = sharedPref.edit()
