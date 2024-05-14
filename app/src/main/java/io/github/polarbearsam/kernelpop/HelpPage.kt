@@ -2,6 +2,7 @@ package io.github.polarbearsam.kernelpop
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -30,6 +31,15 @@ class HelpPage : AppCompatActivity() {
             rows = extras.getInt("rows")
             cols = extras.getInt("cols")
             kernels = extras.getInt("kernels")
+        }
+
+        findViewById<Button>(R.id.moveOn).setOnClickListener {
+            val i = Intent(applicationContext, KernelPop::class.java)
+            i.putExtra("name", name)
+                .putExtra("rows", rows)
+                .putExtra("cols", cols)
+                .putExtra("kernels", kernels)
+            startActivity(i)
         }
 
         // Navigation bar
