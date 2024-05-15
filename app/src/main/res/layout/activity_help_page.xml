@@ -68,14 +68,14 @@
 
     <ImageView
         android:id="@+id/instructionImage1"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="164dp"
+        android:layout_height="139dp"
         android:layout_marginEnd="16dp"
+        android:src="@drawable/instruction_1"
         app:layout_constraintBottom_toTopOf="@+id/instruction2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/instruction1"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        tools:srcCompat="@drawable/instruction_1" />
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <ImageView
         android:id="@+id/instructionImage2"
@@ -85,7 +85,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/instruction2"
         app:layout_constraintTop_toBottomOf="@+id/instructionImage1"
-        tools:srcCompat="@drawable/instruction_2" />
+        android:src="@drawable/instruction_2" />
 
     <ImageView
         android:id="@+id/instructionImage3"
@@ -98,7 +98,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/instruction3"
         app:layout_constraintTop_toBottomOf="@+id/instruction2"
-        tools:srcCompat="@drawable/instruction_3" />
+        android:src="@drawable/instruction_3" />
 
     <Button
         android:id="@+id/moveOn"
