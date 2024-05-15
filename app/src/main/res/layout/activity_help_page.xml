@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="31dp"
         android:background="@color/primary"
-        android:text="@string/modes_title"
+        android:text="@string/help_title"
         android:textAlignment="center"
         android:textSize="34sp"
         android:textStyle="bold"
